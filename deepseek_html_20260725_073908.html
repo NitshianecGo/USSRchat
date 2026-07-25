@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Красный Коммутатор</title>
+    <!-- Подключаем PeerJS -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        /* Советский стиль */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #1a0a0a;
+            color: #f5d742;
+            font-family: 'Times New Roman', serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at 20% 30%, #3a1a1a, #0a0505);
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(30, 10, 10, 0.8);
+            border: 3px solid #b8860b;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(4px);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px #ff4500, 0 0 40px #b22222;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        h1 span {
+            font-size: 2.8rem;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #d4af37;
+            border-top: 1px solid #b8860b;
+            border-bottom: 1px solid #b8860b;
+            padding: 8px 0;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+        .video-grid {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .video-box {
+            flex: 1 1 200px;
+            min-width: 150px;
+            background: #0a0505;
+            border: 2px solid #b8860b;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 4/3;
+        }
+        .video-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #111;
+            display: block;
+        }
+        .video-box .label {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            background: rgba(0,0,0,0.7);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #f5d742;
+            border: 1px solid #b8860b;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0 10px;
+        }
+        .btn {
+            background: #b22222;
+            border: 2px solid #d4af37;
+            color: #f5d742;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.2rem;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-shadow: 0 1px 2px #000;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 0 #6b0f0f;
+            font-weight: bold;
+        }
+        .btn:hover {
+            transform: scale(1.03);
+            background: #cc3333;
+            box-shadow: 0 6px 0 #6b0f0f;
+        }
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #6b0f0f;
+        }
+        .btn-secondary {
+            background: #1a2a3a;
+            border-color: #5a7a9a;
+            box-shadow: 0 4px 0 #0a1a2a;
+        }
+        .btn-secondary:hover {
+            background: #2a3a5a;
+        }
+        .btn-success {
+            background: #2d6a2d;
+            border-color: #8bca8b;
+            box-shadow: 0 4px 0 #1a4a1a;
+        }
+        .btn-success:hover {
+            background: #3a8a3a;
+        }
+        .invite-area {
+            background: #1a1a0a;
+            border: 1px dashed #b8860b;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-size: 0.9rem;
+            color: #d4af37;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .invite-area a {
+            color: #f5d742;
+            text-decoration: underline;
+        }
+        .invite-area .link-label {
+            font-weight: bold;
+            color: #b8860b;
+        }
+        .status {
+            text-align: center;
+            font-size: 1.1rem;
+            padding: 10px;
+            border-radius: 30px;
+            background: rgba(0,0,0,0.5);
+            margin: 10px 0;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .input-field {
+            background: #0a0505;
+            border: 2px solid #b8860b;
+            color: #f5d742;
+            padding: 12px 18px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-family: inherit;
+            min-width: 200px;
+            flex: 1;
+        }
+        .input-field::placeholder {
+            color: #6a5a3a;
+        }
+        .timer {
+            color: #ff6347;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .video-box { flex: 1 1 120px; min-width: 100px; }
+            .btn { padding: 10px 18px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>
+        <span>⚒️</span> Красный Коммутатор <span>⚒️</span>
+    </h1>
+    <div class="subtitle">📡 Сеанс связи по защищённому каналу</div>
+
+    <!-- Блок создания/входа -->
+    <div id="initBlock" style="display: block;">
+        <div class="flex-row" style="margin-bottom: 15px;">
+            <button class="btn btn-success" id="createRoomBtn">Создать комнату</button>
+            <button class="btn btn-secondary" id="joinRoomBtn">Присоединиться</button>
+        </div>
+        <div id="joinPanel" style="display: none;">
+            <div class="flex-row">
+                <input class="input-field" id="roomInput" placeholder="Введите ID комнаты" />
+                <input class="input-field" id="tokenInput" placeholder="Введите токен" />
+                <button class="btn btn-secondary" id="doJoinBtn">Войти</button>
+            </div>
+            <div style="margin-top: 8px; font-size: 0.9rem; color: #b8860b;">
+                <i>Или просто перейдите по ссылке, которую прислал товарищ.</i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок звонка (скрыт изначально) -->
+    <div id="callBlock" style="display: none;">
+        <div class="video-grid">
+            <div class="video-box">
+                <video id="localVideo" autoplay muted playsinline></video>
+                <div class="label">Я</div>
+            </div>
+            <div class="video-box">
+                <video id="remoteVideo" autoplay playsinline></video>
+                <div class="label">Товарищ</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="toggleAudioBtn">🔇 Заглушить агитатор</button>
+            <button class="btn" id="toggleVideoBtn">📷 Потушить экран</button>
+            <button class="btn btn-secondary" id="hangupBtn">⛔ Прервать сеанс</button>
+        </div>
+
+        <div class="invite-area" id="inviteArea">
+            <div><span class="link-label">🔗 Пригласительная ссылка (действительна 5 минут):</span></div>
+            <div><a id="inviteLink" href="#" target="_blank">Ссылка</a></div>
+            <div class="flex-row">
+                <button class="btn btn-secondary" id="copyLinkBtn">📋 Копировать</button>
+                <button class="btn btn-secondary" id="refreshLinkBtn">🔄 Обновить ссылку</button>
+            </div>
+            <div style="font-size:0.9rem; color:#b8860b;">
+                Токен обновляется каждые 5 мин. Старая ссылка станет недействительной.
+                <span id="timerDisplay" class="timer">(до смены: 5:00)</span>
+            </div>
+        </div>
+
+        <div class="status" id="statusDisplay">⏳ Ожидание соединения...</div>
+    </div>
+</div>
+
+<script>
+    // ========== КОНФИГУРАЦИЯ ==========
+    const PEER_OPTIONS = {
+        // Используем облачный сигналинг PeerJS (бесплатно)
+        // Для надёжности можно указать свои STUN/TURN
+        config: {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+                // TURN серверы от Google (только STUN, без TURN)
+                // Для TURN лучше использовать свои, но PeerJS предоставляет свои
+            ]
+        }
+    };
+
+    // Секретный ключ для генерации токена (не менять, если уже используете)
+    const SECRET = "КрасныйОктябрь2026"; // можно изменить, но тогда старые ссылки не будут работать
+
+    // ========== СОСТОЯНИЕ ==========
+    let currentRoom = null;        // ID комнаты
+    let currentToken = null;      // текущий токен
+    let peer = null;             // экземпляр Peer
+    let conn = null;             // PeerJS соединение (DataConnection)
+    let call = null;             // MediaConnection
+    let localStream = null;
+    let remoteStream = null;
+    let isInitiator = false;     // создатель комнаты
+
+    const localVideo = document.getElementById('localVideo');
+    const remoteVideo = document.getElementById('remoteVideo');
+    const statusDisplay = document.getElementById('statusDisplay');
+    const inviteLink = document.getElementById('inviteLink');
+    const timerDisplay = document.getElementById('timerDisplay');
+
+    // Элементы управления
+    const initBlock = document.getElementById('initBlock');
+    const callBlock = document.getElementById('callBlock');
+    const createRoomBtn = document.getElementById('createRoomBtn');
+    const joinRoomBtn = document.getElementById('joinRoomBtn');
+    const joinPanel = document.getElementById('joinPanel');
+    const roomInput = document.getElementById('roomInput');
+    const tokenInput = document.getElementById('tokenInput');
+    const doJoinBtn = document.getElementById('doJoinBtn');
+    const toggleAudioBtn = document.getElementById('toggleAudioBtn');
+    const toggleVideoBtn = document.getElementById('toggleVideoBtn');
+    const hangupBtn = document.getElementById('hangupBtn');
+    const copyLinkBtn = document.getElementById('copyLinkBtn');
+    const refreshLinkBtn = document.getElementById('refreshLinkBtn');
+
+    // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+    function generateToken(roomId, windowMinutes) {
+        // HMAC-SHA256 (имитация) – для простоты используем SHA-256 через SubtleCrypto
+        // Но чтобы не усложнять, сделаем простой хеш (не криптостойкий, но для демо)
+        const data = roomId + ':' + windowMinutes + ':' + SECRET;
+        // Используем встроенный хеш (простой, но достаточно для смены ссылок)
+        let hash = 0;
+        for (let i = 0; i < data.length; i++) {
+            const char = data.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash |= 0; // превращаем в 32-битное целое
+        }
+        return 't' + Math.abs(hash).toString(36).substring(0, 8);
+    }
+
+    function getCurrentWindow() {
+        return Math.floor(Date.now() / 1000 / 300); // каждые 5 минут
+    }
+
+    function getValidTokens(roomId) {
+        const current = getCurrentWindow();
+        const prev = current - 1;
+        return [
+            generateToken(roomId, current),
+            generateToken(roomId, prev)
+        ];
+    }
+
+    function isTokenValid(roomId, token) {
+        const valid = getValidTokens(roomId);
+        return valid.includes(token);
+    }
+
+    function buildInviteLink(roomId, token) {
+        const base = window.location.origin + window.location.pathname;
+        return base + '?room=' + encodeURIComponent(roomId) + '&token=' + encodeURIComponent(token);
+    }
+
+    function updateInviteUI() {
+        if (!currentRoom) return;
+        const token = generateToken(currentRoom, getCurrentWindow());
+        currentToken = token;
+        const link = buildInviteLink(currentRoom, token);
+        inviteLink.href = link;
+        inviteLink.textContent = link;
+    }
+
+    // Таймер обратного отсчёта до смены токена
+    let timerInterval = null;
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        function update() {
+            const now = Date.now();
+            const msInWindow = 300000; // 5 минут
+            const windowStart = Math.floor(now / msInWindow) * msInWindow;
+            const nextChange = windowStart + msInWindow;
+            const diff = nextChange - now;
+            if (diff <= 0) {
+                // Обновляем токен
+                updateInviteUI();
+                timerDisplay.textContent = 'Обновление...';
+                setTimeout(() => update(), 100);
+                return;
+            }
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            timerDisplay.textContent = `(до смены: ${minutes}:${seconds.toString().padStart(2, '0')})`;
+        }
+        update();
+        timerInterval = setInterval(update, 1000);
+    }
+
+    // ========== РАБОТА С МЕДИА ==========
+    async function getMedia() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+            return stream;
+        } catch (e) {
+            statusDisplay.textContent = '❌ Не удалось получить доступ к камере/микрофону. Проверьте разрешения.';
+            throw e;
+        }
+    }
+
+    function setupLocalStream(stream) {
+        localStream = stream;
+        localVideo.srcObject = stream;
+    }
+
+    // ========== PEERJS ЛОГИКА ==========
+    function initializePeer(roomId, isCreator) {
+        return new Promise((resolve, reject) => {
+            const id = isCreator ? roomId : null; // создатель использует roomId как свой ID
+            const peerObj = new Peer(id, PEER_OPTIONS);
+            peerObj.on('open', (id) => {
+                console.log('Peer открыт, ID:', id);
+                resolve(peerObj);
+            });
+            peerObj.on('error', (err) => {
+                reject(err);
+            });
+        });
+    }
+
+    // Создание комнаты (инициатор)
+    async function createRoom() {
+        try {
+            statusDisplay.textContent = '🛠 Создаём комнату...';
+            const roomId = 'room-' + Math.random().toString(36).substring(2, 8);
+            currentRoom = roomId;
+            isInitiator = true;
+
+            // Получаем медиа
+            const stream = await getMedia();
+            setupLocalStream(stream);
+
+            // Создаём Peer с ID = roomId
+            peer = await initializePeer(roomId, true);
+            // Слушаем входящие соединения
+            peer.on('connection', (dataConn) => {
+                // Принимаем только одно соединение
+                if (conn) {
+                    dataConn.close();
+                    return;
+                }
+                conn = dataConn;
+                conn.on('open', () => {
+                    statusDisplay.textContent = '✅ Соединение установлено!';
+                });
+                conn.on('data', (data) => {
+                    // Обработка сигнальных сообщений (мы будем использовать отдельный канал для звонка)
+                });
+                // Отвечаем на звонок
+                peer.on('call', (incomingCall) => {
+                    if (call) {
+                        incomingCall.answer(); // отклоняем?
+                        return;
+                    }
+                    call = incomingCall;
+                    call.answer(localStream);
+                    call.on('stream', (remote) => {
+                        remoteStream = remote;
+                        remoteVideo.srcObject = remote;
+                        statusDisplay.textContent = '📞 Товарищ на связи!';
+                    });
+                    call.on('close', () => {
+                        remoteVideo.srcObject = null;
+                        statusDisplay.textContent = '🔴 Сеанс завершён.';
+                        call = null;
+                    });
+                });
+            });
+
+            // Обновляем интерфейс
+            initBlock.style.display = 'none';
+            callBlock.style.display = 'block';
+            updateInviteUI();
+            startTimer();
+            statusDisplay.textContent = '⏳ Ожидаем подключения товарища...';
+
+            // Показываем ссылку
+        } catch (e) {
+            console.error(e);
+            statusDisplay.textContent = '❌ Ошибка создания комнаты: ' + e.message;
+        }
+    }
+
+    // Присоединение к комнате (клиент)
+    async function joinRoom(roomId, token) {
+        try {
+            if (!roomId || !token) {
+                statusDisplay.textContent = '❌ Введите ID и токен.';
+                return;
+            }
+            // Проверка токена
+            if (!isTokenValid(roomId, token)) {
+                statusDisplay.textContent = '❌ Недействительная ссылка. Попросите товарища обновить приглашение.';
+                return;
+            }
+
+            currentRoom = roomId;
+            isInitiator = false;
+            const stream = await getMedia();
+            setupLocalStream(stream);
+
+            // Создаём Peer со случайным ID (не занимаем roomId)
+            peer = await initializePeer(null, false);
+            // Подключаемся к создателю (peer с ID = roomId)
+            conn = peer.connect(roomId);
+            conn.on('open', () => {
+                statusDisplay.textContent = '✅ Соединение с комнатой установлено.';
+            });
+            conn.on('error', (err) => {
+                statusDisplay.textContent = '❌ Ошибка соединения: ' + err.message;
+            });
+
+            // Совершаем звонок
+            const callObj = peer.call(roomId, localStream);
+            call = callObj;
+            call.on('stream', (remote) => {
+                remoteStream = remote;
+                remoteVideo.srcObject = remote;
+                statusDisplay.textContent = '📞 Товарищ на связи!';
+            });
+            call.on('close', () => {
+                remoteVideo.srcObject = null;
+                statusDisplay.textContent = '🔴 Сеанс завершён.';
+                call = null;
+            });
+
+            initBlock.style.display = 'none';
+            callBlock.style.display = 'block';
+            // Для гостя ссылка не нужна, но покажем информацию
+            document.getElementById('inviteArea').style.display = 'none';
+            statusDisplay.textContent = '⏳ Устанавливаем соединение...';
+        } catch (e) {
+            console.error(e);
+            statusDisplay.textContent = '❌ Ошибка присоединения: ' + e.message;
+        }
+    }
+
+    // ========== ОБРАБОТЧИКИ ИНТЕРФЕЙСА ==========
+    createRoomBtn.addEventListener('click', createRoom);
+
+    joinRoomBtn.addEventListener('click', () => {
+        joinPanel.style.display = joinPanel.style.display === 'none' ? 'flex' : 'none';
+    });
+
+    doJoinBtn.addEventListener('click', () => {
+        const room = roomInput.value.trim();
+        const token = tokenInput.value.trim();
+        joinRoom(room, token);
+    });
+
+    // Автоматический вход по параметрам в URL
+    window.addEventListener('load', () => {
+        const params = new URLSearchParams(window.location.search);
+        const room = params.get('room');
+        const token = params.get('token');
+        if (room && token) {
+            // Пробуем присоединиться
+            joinRoom(room, token);
+        }
+    });
+
+    // Кнопки управления звонком
+    toggleAudioBtn.addEventListener('click', () => {
+        if (localStream) {
+            const audioTracks = localStream.getAudioTracks();
+            if (audioTracks.length) {
+                const enabled = !audioTracks[0].enabled;
+                audioTracks[0].enabled = enabled;
+                toggleAudioBtn.textContent = enabled ? '🔇 Заглушить агитатор' : '🔊 Включить агитатор';
+            }
+        }
+    });
+
+    toggleVideoBtn.addEventListener('click', () => {
+        if (localStream) {
+            const videoTracks = localStream.getVideoTracks();
+            if (videoTracks.length) {
+                const enabled = !videoTracks[0].enabled;
+                videoTracks[0].enabled = enabled;
+                toggleVideoBtn.textContent = enabled ? '📷 Потушить экран' : '📷 Включить экран';
+            }
+        }
+    });
+
+    hangupBtn.addEventListener('click', () => {
+        // Закрываем соединение
+        if (call) call.close();
+        if (conn) conn.close();
+        if (peer) peer.destroy();
+        // Освобождаем медиа
+        if (localStream) {
+            localStream.getTracks().forEach(t => t.stop());
+            localStream = null;
+        }
+        remoteVideo.srcObject = null;
+        localVideo.srcObject = null;
+        callBlock.style.display = 'none';
+        initBlock.style.display = 'block';
+        statusDisplay.textContent = '';
+        if (timerInterval) clearInterval(timerInterval);
+    });
+
+    copyLinkBtn.addEventListener('click', () => {
+        const link = inviteLink.href;
+        if (link) {
+            navigator.clipboard.writeText(link).then(() => {
+                statusDisplay.textContent = '✅ Ссылка скопирована!';
+            }).catch(() => {
+                // fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = link;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                statusDisplay.textContent = '✅ Ссылка скопирована!';
+            });
+        }
+    });
+
+    refreshLinkBtn.addEventListener('click', () => {
+        updateInviteUI();
+        statusDisplay.textContent = '🔄 Ссылка обновлена!';
+    });
+
+    // Дополнительно: если ссылка обновилась по таймеру, обновляем UI
+    // уже есть в startTimer
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    // Начальное состояние
+    initBlock.style.display = 'block';
+    callBlock.style.display = 'none';
+    console.log('Красный Коммутатор загружен. Даёшь связь!');
+</script>
+</body>
+</html>
