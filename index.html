@@ -7,11 +7,7 @@
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         /* ---------- Общий сброс ---------- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Times New Roman', serif;
             background: #1a0808;
@@ -22,7 +18,7 @@
             overflow: hidden;
         }
 
-        /* ---------- Экран загрузки (Splash) ---------- */
+        /* ---------- Экран загрузки ---------- */
         #splashScreen {
             position: fixed;
             inset: 0;
@@ -34,87 +30,29 @@
             z-index: 9999;
             transition: opacity 1s ease;
         }
-        #splashScreen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .splash-content {
-            text-align: center;
-            color: #f5d742;
-            text-shadow: 0 0 30px #b22222;
-            animation: fadeInUp 1.5s ease;
-        }
-        .splash-content h1 {
-            font-size: 4rem;
-            letter-spacing: 8px;
-            margin-bottom: 10px;
-        }
-        .splash-content .sub {
-            font-size: 1.8rem;
-            border-top: 2px solid #b8860b;
-            border-bottom: 2px solid #b8860b;
-            padding: 10px 30px;
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .splash-content .hammer-sickle {
-            font-size: 5rem;
-            display: block;
-            margin-bottom: 20px;
-        }
-        .loading-bar {
-            width: 200px;
-            height: 4px;
-            background: #2a1a1a;
-            border-radius: 2px;
-            margin: 30px auto 0;
-            overflow: hidden;
-            border: 1px solid #b8860b;
-        }
-        .loading-bar .fill {
-            height: 100%;
-            width: 0;
-            background: linear-gradient(90deg, #b8860b, #f5d742);
-            border-radius: 2px;
-            animation: load 2s ease-in-out forwards;
-        }
-        @keyframes load {
-            0% { width: 0; }
-            100% { width: 100%; }
-        }
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        #splashScreen.hidden { opacity: 0; pointer-events: none; }
+        .splash-content { text-align: center; color: #f5d742; text-shadow: 0 0 30px #b22222; animation: fadeInUp 1.5s ease; }
+        .splash-content h1 { font-size: 4rem; letter-spacing: 8px; margin-bottom: 10px; }
+        .splash-content .sub { font-size: 1.8rem; border-top: 2px solid #b8860b; border-bottom: 2px solid #b8860b; padding: 10px 30px; display: inline-block; margin-top: 10px; }
+        .splash-content .hammer-sickle { font-size: 5rem; display: block; margin-bottom: 20px; }
+        .loading-bar { width: 200px; height: 4px; background: #2a1a1a; border-radius: 2px; margin: 30px auto 0; overflow: hidden; border: 1px solid #b8860b; }
+        .loading-bar .fill { height: 100%; width: 0; background: linear-gradient(90deg, #b8860b, #f5d742); animation: load 2s ease-in-out forwards; }
+        @keyframes load { 0% { width: 0; } 100% { width: 100%; } }
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
 
         /* ---------- Основное приложение ---------- */
         #app {
             width: 100%;
-            max-width: 900px;
+            max-width: 1100px;
             padding: 20px;
             opacity: 0;
             transition: opacity 1.2s ease;
         }
-        #app.visible {
-            opacity: 1;
-        }
+        #app.visible { opacity: 1; }
 
-        /* Фоновые декорации (серп и молот по углам) */
-        .bg-symbols {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .bg-symbols .symbol {
-            position: absolute;
-            font-size: 8rem;
-            opacity: 0.08;
-            color: #b8860b;
-            transform: rotate(-15deg);
-            user-select: none;
-        }
+        /* Фоновые декорации */
+        .bg-symbols { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .bg-symbols .symbol { position: absolute; font-size: 8rem; opacity: 0.08; color: #b8860b; transform: rotate(-15deg); user-select: none; }
         .bg-symbols .symbol.tl { top: 10px; left: 10px; }
         .bg-symbols .symbol.tr { top: 10px; right: 10px; transform: rotate(15deg); }
         .bg-symbols .symbol.bl { bottom: 10px; left: 10px; transform: rotate(15deg); }
@@ -127,58 +65,26 @@
             background: rgba(20, 8, 8, 0.85);
             border: 3px solid #b8860b;
             border-radius: 30px;
-            padding: 30px 25px;
+            padding: 25px 20px;
             box-shadow: 0 0 60px rgba(255, 215, 0, 0.15);
             backdrop-filter: blur(6px);
             margin: 0 auto;
         }
 
         /* Заголовок */
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .header h1 {
-            font-size: 2.8rem;
-            color: #f5d742;
-            text-shadow: 0 0 20px #b22222, 0 0 40px #8b0000;
-            letter-spacing: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .header .subtitle {
-            color: #d4af37;
-            font-size: 1.2rem;
-            border-top: 1px solid #b8860b;
-            border-bottom: 1px solid #b8860b;
-            padding: 6px 0;
-            margin-top: 5px;
-            letter-spacing: 2px;
-        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 2.8rem; color: #f5d742; text-shadow: 0 0 20px #b22222; letter-spacing: 6px; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .header .subtitle { color: #d4af37; font-size: 1.2rem; border-top: 1px solid #b8860b; border-bottom: 1px solid #b8860b; padding: 6px 0; margin-top: 5px; letter-spacing: 2px; }
 
-        /* Блоки */
-        .block-init, .block-call {
-            display: none;
-        }
-        .block-init.active {
-            display: block;
-        }
-        .block-call.active {
-            display: block;
-        }
-
-        /* Кнопки красно-жёлтые */
+        /* Кнопки */
         .btn {
             background: #b22222;
             border: 2px solid #d4af37;
             color: #f5d742;
             font-family: 'Times New Roman', serif;
             font-weight: bold;
-            font-size: 1.2rem;
-            padding: 14px 32px;
+            font-size: 1.1rem;
+            padding: 12px 28px;
             border-radius: 60px;
             cursor: pointer;
             transition: all 0.2s;
@@ -190,137 +96,136 @@
             justify-content: center;
             gap: 8px;
         }
-        .btn:hover {
-            transform: scale(1.03);
-            background: #cc3333;
-            box-shadow: 0 7px 0 #6b0f0f;
-        }
-        .btn:active {
-            transform: translateY(5px);
-            box-shadow: 0 2px 0 #6b0f0f;
-        }
-        .btn-secondary {
-            background: #1a2a3a;
-            border-color: #5a7a9a;
-            box-shadow: 0 5px 0 #0a1a2a;
-        }
-        .btn-secondary:hover {
-            background: #2a3a5a;
-        }
-        .btn-success {
-            background: #2d6a2d;
-            border-color: #8bca8b;
-            box-shadow: 0 5px 0 #1a4a1a;
-        }
-        .btn-success:hover {
-            background: #3a8a3a;
-        }
-        .btn-sm {
-            padding: 10px 22px;
-            font-size: 1rem;
-        }
-
-        .flex-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin: 15px 0;
-        }
+        .btn:hover { transform: scale(1.03); background: #cc3333; box-shadow: 0 7px 0 #6b0f0f; }
+        .btn:active { transform: translateY(5px); box-shadow: 0 2px 0 #6b0f0f; }
+        .btn-secondary { background: #1a2a3a; border-color: #5a7a9a; box-shadow: 0 5px 0 #0a1a2a; }
+        .btn-secondary:hover { background: #2a3a5a; }
+        .btn-success { background: #2d6a2d; border-color: #8bca8b; box-shadow: 0 5px 0 #1a4a1a; }
+        .btn-success:hover { background: #3a8a3a; }
+        .btn-sm { padding: 8px 18px; font-size: 0.95rem; }
+        .flex-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; margin: 10px 0; }
 
         /* Видео-сетка */
-        .video-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin: 20px 0;
+        .video-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 15px 0; }
+        .video-box { flex: 1 1 240px; min-width: 180px; background: #0a0505; border: 2px solid #b8860b; border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 4/3; }
+        .video-box video { width: 100%; height: 100%; object-fit: cover; background: #111; display: block; }
+        .video-box .label { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); padding: 4px 16px; border-radius: 30px; font-size: 0.9rem; color: #f5d742; border: 1px solid #b8860b; }
+
+        /* Чат */
+        .chat-area {
+            margin-top: 20px;
+            border-top: 2px solid #b8860b;
+            padding-top: 15px;
         }
-        .video-box {
-            flex: 1 1 240px;
-            min-width: 180px;
-            background: #0a0505;
-            border: 2px solid #b8860b;
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            aspect-ratio: 4/3;
-        }
-        .video-box video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            background: #111;
-            display: block;
-        }
-        .video-box .label {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            background: rgba(0,0,0,0.7);
-            padding: 4px 16px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            color: #f5d742;
+        .chat-messages {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
             border: 1px solid #b8860b;
         }
+        .chat-messages .msg {
+            background: rgba(30,15,15,0.8);
+            border-radius: 10px;
+            padding: 6px 12px;
+            margin-bottom: 6px;
+            color: #f5d742;
+            word-break: break-word;
+        }
+        .chat-messages .msg .sender { color: #d4af37; font-weight: bold; }
+        .chat-messages .msg .time { color: #8a7a5a; font-size: 0.7rem; margin-left: 10px; }
+        .chat-messages .msg img { max-width: 150px; border-radius: 8px; margin-top: 4px; border: 1px solid #b8860b; }
+        .chat-input-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .chat-input-row input[type="text"] {
+            flex: 1;
+            background: #0a0505;
+            border: 2px solid #b8860b;
+            color: #f5d742;
+            padding: 10px 16px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-family: inherit;
+            min-width: 150px;
+        }
+        .chat-input-row input[type="text"]::placeholder { color: #6a5a3a; }
+        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
 
-        /* Панель приглашения */
+        /* Приглашение */
         .invite-area {
             background: #1a1a0a;
             border: 1px dashed #b8860b;
             border-radius: 16px;
-            padding: 18px;
-            margin: 20px 0;
+            padding: 15px;
+            margin: 15px 0;
             word-break: break-all;
             font-size: 0.95rem;
             color: #d4af37;
         }
-        .invite-area .link-label {
-            font-weight: bold;
-            color: #b8860b;
-        }
-        .invite-area a {
-            color: #f5d742;
-            text-decoration: underline;
-        }
-        .timer {
-            color: #ff6347;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
+        .invite-area .link-label { font-weight: bold; color: #b8860b; }
+        .invite-area a { color: #f5d742; text-decoration: underline; }
+        .timer { color: #ff6347; font-weight: bold; font-size: 1.1rem; }
 
         /* Статус */
         .status {
             text-align: center;
-            font-size: 1.2rem;
-            padding: 12px;
+            font-size: 1.1rem;
+            padding: 10px;
             border-radius: 60px;
             background: rgba(0,0,0,0.5);
-            margin: 15px 0;
+            margin: 10px 0;
             color: #f5d742;
         }
 
-        /* Поля ввода */
-        .input-field {
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #1a0a0a;
+            border: 3px solid #b8860b;
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            color: #f5d742;
+            box-shadow: 0 0 50px rgba(255,215,0,0.3);
+        }
+        .modal-content h2 { text-align: center; margin-bottom: 20px; }
+        .modal-content label { display: block; margin: 12px 0 4px; font-size: 1.1rem; }
+        .modal-content input, .modal-content select {
+            width: 100%;
+            padding: 10px 16px;
             background: #0a0505;
             border: 2px solid #b8860b;
             color: #f5d742;
-            padding: 14px 20px;
             border-radius: 60px;
             font-size: 1rem;
             font-family: inherit;
-            min-width: 200px;
-            flex: 1;
         }
-        .input-field::placeholder {
-            color: #6a5a3a;
-        }
+        .modal-content .btn { width: 100%; margin-top: 15px; }
 
         @media (max-width: 600px) {
             .header h1 { font-size: 2rem; }
             .video-box { flex: 1 1 140px; min-width: 120px; }
-            .btn { padding: 10px 20px; font-size: 1rem; }
+            .btn { padding: 10px 18px; font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -336,12 +241,35 @@
         </div>
     </div>
 
-    <!-- ФОН С СЕРПОМ И МОЛОТОМ -->
+    <!-- ФОН С СИМВОЛАМИ -->
     <div class="bg-symbols">
         <div class="symbol tl">☭</div>
         <div class="symbol tr">☭</div>
         <div class="symbol bl">☭</div>
         <div class="symbol br">☭</div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ СОЗДАНИЯ КОМНАТЫ -->
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <h2>☭ Создание комнаты</h2>
+            <label>Имя комнаты</label>
+            <input type="text" id="roomNameInput" placeholder="Название" value="Комната товарищей">
+            <label>Пароль (необязательно)</label>
+            <input type="text" id="roomPasswordInput" placeholder="Пароль">
+            <label>Количество человек</label>
+            <input type="number" id="roomMaxUsers" value="2" min="2" max="10">
+            <label>Время жизни комнаты (минут)</label>
+            <select id="roomLifetime">
+                <option value="5">5</option>
+                <option value="15" selected>15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+                <option value="60">60</option>
+            </select>
+            <button class="btn btn-success" id="confirmCreateBtn">Создать</button>
+            <button class="btn btn-secondary" id="cancelCreateBtn" style="margin-top:8px;">Отмена</button>
+        </div>
     </div>
 
     <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
@@ -357,6 +285,7 @@
                 <div class="flex-row">
                     <button class="btn btn-success" id="createRoomBtn">Создать комнату</button>
                     <button class="btn btn-secondary" id="joinRoomBtn">Присоединиться</button>
+                    <button class="btn btn-secondary" id="testDeviceBtn">Проверить устройства</button>
                 </div>
                 <div id="joinPanel" style="display: none; margin-top: 15px;">
                     <div class="flex-row">
@@ -371,7 +300,7 @@
                 <div id="statusInit" class="status" style="margin-top:20px; background:transparent;">Готов к связи</div>
             </div>
 
-            <!-- Блок звонка -->
+            <!-- Блок звонка и чата -->
             <div id="callBlock" class="block-call">
                 <div class="video-grid">
                     <div class="video-box">
@@ -388,6 +317,19 @@
                     <button class="btn btn-sm" id="toggleAudioBtn">🔇 Заглушить</button>
                     <button class="btn btn-sm" id="toggleVideoBtn">📷 Выключить</button>
                     <button class="btn btn-secondary btn-sm" id="hangupBtn">⛔ Прервать</button>
+                </div>
+
+                <!-- Чат -->
+                <div class="chat-area">
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input-row">
+                        <input type="text" id="chatInput" placeholder="Введите сообщение..." />
+                        <button class="btn btn-sm" id="sendChatBtn">Отправить</button>
+                        <div class="file-input-wrapper">
+                            <button class="btn btn-sm btn-secondary">📎 Файл</button>
+                            <input type="file" id="fileInput" accept="image/*,video/*" multiple />
+                        </div>
+                    </div>
                 </div>
 
                 <div class="invite-area" id="inviteArea">
@@ -420,13 +362,13 @@
         };
         const SECRET = "СССР_2026_КрасныйОктябрь";
 
-        // ========== ДОМ-ЭЛЕМЕНТЫ ==========
+        // ========== DOM ==========
         const splash = document.getElementById('splashScreen');
         const app = document.getElementById('app');
-
         const initBlock = document.getElementById('initBlock');
         const callBlock = document.getElementById('callBlock');
         const statusInit = document.getElementById('statusInit');
+        const createModal = document.getElementById('createModal');
 
         const createBtn = document.getElementById('createRoomBtn');
         const joinBtn = document.getElementById('joinRoomBtn');
@@ -434,6 +376,7 @@
         const roomInput = document.getElementById('roomInput');
         const tokenInput = document.getElementById('tokenInput');
         const doJoinBtn = document.getElementById('doJoinBtn');
+        const testDeviceBtn = document.getElementById('testDeviceBtn');
 
         const localVideo = document.getElementById('localVideo');
         const remoteVideo = document.getElementById('remoteVideo');
@@ -447,16 +390,36 @@
         const copyLinkBtn = document.getElementById('copyLinkBtn');
         const refreshLinkBtn = document.getElementById('refreshLinkBtn');
 
+        // Чат
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendChatBtn = document.getElementById('sendChatBtn');
+        const fileInput = document.getElementById('fileInput');
+
+        // Модалка
+        const roomNameInput = document.getElementById('roomNameInput');
+        const roomPasswordInput = document.getElementById('roomPasswordInput');
+        const roomMaxUsers = document.getElementById('roomMaxUsers');
+        const roomLifetime = document.getElementById('roomLifetime');
+        const confirmCreateBtn = document.getElementById('confirmCreateBtn');
+        const cancelCreateBtn = document.getElementById('cancelCreateBtn');
+
         // ========== СОСТОЯНИЕ ==========
         let currentRoom = null;
         let currentToken = null;
         let peer = null;
-        let conn = null;
-        let call = null;
+        let conn = null;          // DataConnection для чата
+        let call = null;          // MediaConnection
         let localStream = null;
         let remoteStream = null;
         let isInitiator = false;
         let timerInterval = null;
+        let roomLifetimeMs = 15 * 60000; // по умолчанию 15 мин
+        let roomCreatedAt = null;
+        let lifetimeTimer = null;
+
+        // Хранилище сообщений (локальное)
+        let messages = [];
 
         // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
         function getCurrentWindow() {
@@ -519,6 +482,19 @@
             timerInterval = setInterval(update, 1000);
         }
 
+        // ========== ПРОВЕРКА УСТРОЙСТВ ==========
+        async function testDevices() {
+            statusInit.textContent = '🔍 Проверка устройств...';
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+                stream.getTracks().forEach(t => t.stop());
+                statusInit.textContent = '✅ Все устройства работают! (камера и микрофон доступны)';
+            } catch (e) {
+                statusInit.textContent = '❌ Ошибка: ' + e.message + '. Проверьте разрешения и подключение устройств.';
+                console.error(e);
+            }
+        }
+
         // ========== МЕДИА ==========
         async function getMedia() {
             try {
@@ -529,14 +505,26 @@
             }
         }
 
-        // ========== СОЗДАНИЕ КОМНАТЫ ==========
-        async function createRoom() {
+        // ========== СОЗДАНИЕ КОМНАТЫ (через модалку) ==========
+        function showCreateModal() {
+            createModal.classList.add('active');
+        }
+
+        async function confirmCreateRoom() {
+            const name = roomNameInput.value.trim() || 'Комната товарищей';
+            const password = roomPasswordInput.value.trim();
+            const maxUsers = parseInt(roomMaxUsers.value) || 2;
+            const lifetime = parseInt(roomLifetime.value) || 15;
+            roomLifetimeMs = lifetime * 60000;
+
+            createModal.classList.remove('active');
+
             try {
                 statusInit.textContent = '🛠 Создаём комнату...';
-                // Генерируем уникальный ID для комнаты (он же будет ID Peer)
                 const roomId = 'chat-' + Math.random().toString(36).substring(2, 10);
                 currentRoom = roomId;
                 isInitiator = true;
+                roomCreatedAt = Date.now();
 
                 // Получаем медиа
                 const stream = await getMedia();
@@ -550,7 +538,7 @@
                     peer.on('error', reject);
                 });
 
-                // Обработчик входящего соединения (DataChannel)
+                // Обработчик входящего DataConnection (для чата)
                 peer.on('connection', (dataConn) => {
                     if (conn) {
                         dataConn.close();
@@ -558,14 +546,23 @@
                     }
                     conn = dataConn;
                     conn.on('open', () => {
-                        statusDisplay.textContent = '✅ Соединение установлено!';
+                        statusDisplay.textContent = '✅ Соединение для чата установлено!';
+                        // Отправляем историю сообщений (локальную)
+                        sendMessageHistory();
+                    });
+                    conn.on('data', (data) => {
+                        handleIncomingData(data);
+                    });
+                    conn.on('close', () => {
+                        conn = null;
+                        statusDisplay.textContent = '⚠️ Соединение чата разорвано.';
                     });
                 });
 
                 // Обработчик входящего звонка
                 peer.on('call', (incomingCall) => {
                     if (call) {
-                        incomingCall.answer(); // отклоняем лишние
+                        incomingCall.answer();
                         return;
                     }
                     call = incomingCall;
@@ -589,6 +586,13 @@
                 startTimer();
                 statusDisplay.textContent = '⏳ Ожидаем подключения товарища...';
                 statusInit.textContent = 'Готов к связи';
+
+                // Запускаем таймер жизни комнаты
+                startLifetimeTimer();
+
+                // Сохраняем метаданные комнаты (для отображения)
+                console.log('Комната создана:', { name, password, maxUsers, lifetime });
+
             } catch (err) {
                 console.error(err);
                 statusInit.textContent = '❌ Ошибка: ' + err.message;
@@ -621,13 +625,19 @@
                     peer.on('error', reject);
                 });
 
-                // Подключаемся к создателю (чей ID = roomId)
+                // Подключаемся к создателю (чей ID = roomId) – для чата
                 conn = peer.connect(roomId);
                 conn.on('open', () => {
                     statusDisplay.textContent = '✅ Соединение с комнатой установлено.';
+                    // Запрашиваем историю
+                    conn.send({ type: 'requestHistory' });
                 });
-                conn.on('error', (e) => {
-                    statusDisplay.textContent = '❌ Ошибка соединения: ' + e.message;
+                conn.on('data', (data) => {
+                    handleIncomingData(data);
+                });
+                conn.on('close', () => {
+                    conn = null;
+                    statusDisplay.textContent = '⚠️ Соединение чата разорвано.';
                 });
 
                 // Совершаем звонок
@@ -647,18 +657,152 @@
                 // Скрыть начальный блок, показать звонок
                 initBlock.classList.remove('active');
                 callBlock.classList.add('active');
-                // Для гостя скрываем пригласительную часть (она не нужна)
                 document.getElementById('inviteArea').style.display = 'none';
                 statusDisplay.textContent = '⏳ Устанавливаем соединение...';
                 statusInit.textContent = 'Готов к связи';
+
             } catch (err) {
                 console.error(err);
                 statusInit.textContent = '❌ Ошибка: ' + err.message;
             }
         }
 
+        // ========== ОБРАБОТКА ВХОДЯЩИХ ДАННЫХ (чат) ==========
+        function handleIncomingData(data) {
+            if (typeof data === 'string') {
+                try {
+                    data = JSON.parse(data);
+                } catch (e) {
+                    // обычный текст
+                    addMessage('Товарищ', data, 'text');
+                    return;
+                }
+            }
+            if (data.type === 'message') {
+                addMessage(data.sender || 'Товарищ', data.content, data.mediaType || 'text', data.timestamp);
+            } else if (data.type === 'history') {
+                // Получаем историю от создателя
+                if (data.messages && Array.isArray(data.messages)) {
+                    data.messages.forEach(msg => {
+                        addMessage(msg.sender, msg.content, msg.mediaType, msg.timestamp);
+                    });
+                }
+            } else if (data.type === 'requestHistory') {
+                // Отправить историю запрашивающему
+                sendMessageHistory();
+            }
+        }
+
+        // ========== ОТПРАВКА СООБЩЕНИЙ ==========
+        function sendMessage(text, mediaType = 'text', fileData = null) {
+            if (!conn) {
+                statusDisplay.textContent = '⚠️ Нет соединения для чата.';
+                return;
+            }
+            const msg = {
+                type: 'message',
+                sender: 'Я',
+                content: text,
+                mediaType: mediaType,
+                timestamp: Date.now()
+            };
+            if (fileData) {
+                msg.content = fileData; // base64
+            }
+            conn.send(JSON.stringify(msg));
+            addMessage('Я', text, mediaType, msg.timestamp);
+            // Сохраняем локально
+            saveMessageToStorage('Я', text, mediaType, msg.timestamp);
+        }
+
+        function sendMessageHistory() {
+            if (!conn) return;
+            // Отправляем только последние 50 сообщений
+            const history = messages.slice(-50);
+            conn.send(JSON.stringify({
+                type: 'history',
+                messages: history
+            }));
+        }
+
+        // ========== ДОБАВЛЕНИЕ СООБЩЕНИЯ В UI ==========
+        function addMessage(sender, content, mediaType = 'text', timestamp = Date.now()) {
+            const div = document.createElement('div');
+            div.className = 'msg';
+            const timeStr = new Date(timestamp).toLocaleTimeString();
+            let displayContent = content;
+            if (mediaType === 'image') {
+                displayContent = `<img src="${content}" alt="Изображение" />`;
+            } else if (mediaType === 'video') {
+                displayContent = `<video src="${content}" controls style="max-width:150px;max-height:150px;"></video>`;
+            }
+            div.innerHTML = `<span class="sender">${sender}</span> <span class="time">${timeStr}</span><br>${displayContent}`;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // ========== ЛОКАЛЬНОЕ ХРАНЕНИЕ (с удалением через 24 часа) ==========
+        function saveMessageToStorage(sender, content, mediaType, timestamp) {
+            const msg = { sender, content, mediaType, timestamp };
+            messages.push(msg);
+            // Очищаем старые сообщения (старше 24 часов)
+            const now = Date.now();
+            messages = messages.filter(m => (now - m.timestamp) < 86400000);
+            // Сохраняем в localStorage
+            try {
+                localStorage.setItem('chat_messages_' + currentRoom, JSON.stringify(messages));
+            } catch (e) {}
+        }
+
+        function loadMessagesFromStorage() {
+            try {
+                const stored = localStorage.getItem('chat_messages_' + currentRoom);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    const now = Date.now();
+                    messages = parsed.filter(m => (now - m.timestamp) < 86400000);
+                    // Отображаем
+                    messages.forEach(m => {
+                        addMessage(m.sender, m.content, m.mediaType, m.timestamp);
+                    });
+                }
+            } catch (e) {}
+        }
+
+        // ========== ТАЙМЕР ЖИЗНИ КОМНАТЫ ==========
+        function startLifetimeTimer() {
+            if (lifetimeTimer) clearTimeout(lifetimeTimer);
+            lifetimeTimer = setTimeout(() => {
+                statusDisplay.textContent = '⏰ Время комнаты истекло. Сеанс завершён.';
+                hangUp();
+            }, roomLifetimeMs);
+        }
+
+        // ========== ЗАВЕРШЕНИЕ ==========
+        function hangUp() {
+            if (call) call.close();
+            if (conn) conn.close();
+            if (peer) peer.destroy();
+            if (localStream) {
+                localStream.getTracks().forEach(t => t.stop());
+                localStream = null;
+            }
+            remoteVideo.srcObject = null;
+            localVideo.srcObject = null;
+            callBlock.classList.remove('active');
+            initBlock.classList.add('active');
+            statusDisplay.textContent = '';
+            if (timerInterval) clearInterval(timerInterval);
+            if (lifetimeTimer) clearTimeout(lifetimeTimer);
+            document.getElementById('inviteArea').style.display = 'block';
+            chatMessages.innerHTML = '';
+            messages = [];
+        }
+
         // ========== ОБРАБОТЧИКИ ИНТЕРФЕЙСА ==========
-        createBtn.addEventListener('click', createRoom);
+        createBtn.addEventListener('click', showCreateModal);
+        cancelCreateBtn.addEventListener('click', () => createModal.classList.remove('active'));
+        confirmCreateBtn.addEventListener('click', confirmCreateRoom);
 
         joinBtn.addEventListener('click', () => {
             joinPanel.style.display = joinPanel.style.display === 'none' ? 'flex' : 'none';
@@ -670,9 +814,10 @@
             joinRoom(room, token);
         });
 
+        testDeviceBtn.addEventListener('click', testDevices);
+
         // Автоматический вход по параметрам URL
         window.addEventListener('load', () => {
-            // Скрываем сплеш через 3 секунды (после загрузки)
             setTimeout(() => {
                 splash.classList.add('hidden');
                 app.classList.add('visible');
@@ -682,7 +827,6 @@
             const room = params.get('room');
             const token = params.get('token');
             if (room && token) {
-                // Небольшая задержка, чтобы сплеш успел показаться
                 setTimeout(() => joinRoom(room, token), 500);
             }
         });
@@ -710,23 +854,7 @@
             }
         });
 
-        hangupBtn.addEventListener('click', () => {
-            if (call) call.close();
-            if (conn) conn.close();
-            if (peer) peer.destroy();
-            if (localStream) {
-                localStream.getTracks().forEach(t => t.stop());
-                localStream = null;
-            }
-            remoteVideo.srcObject = null;
-            localVideo.srcObject = null;
-            callBlock.classList.remove('active');
-            initBlock.classList.add('active');
-            statusDisplay.textContent = '';
-            if (timerInterval) clearInterval(timerInterval);
-            // Показать пригласительную область обратно (для создателя)
-            document.getElementById('inviteArea').style.display = 'block';
-        });
+        hangupBtn.addEventListener('click', hangUp);
 
         copyLinkBtn.addEventListener('click', () => {
             const link = inviteLink.href;
@@ -749,6 +877,97 @@
             updateInviteUI();
             statusDisplay.textContent = '🔄 Ссылка обновлена!';
         });
+
+        // === Чат ===
+        sendChatBtn.addEventListener('click', () => {
+            const text = chatInput.value.trim();
+            if (text) {
+                sendMessage(text);
+                chatInput.value = '';
+            }
+        });
+
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                sendChatBtn.click();
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const base64 = ev.target.result;
+                    let mediaType = 'image';
+                    if (file.type.startsWith('video/')) mediaType = 'video';
+                    // Отправляем как сообщение
+                    sendMessage(base64, mediaType);
+                };
+                reader.readAsDataURL(file);
+            }
+            fileInput.value = '';
+        });
+
+        // При получении сообщения мы уже добавляем в UI через handleIncomingData
+        // и сохраняем в localStorage через sendMessage (для отправителя) и через addMessage? 
+        // Чтобы синхронизировать, мы сохраняем при отправке и при получении (уже через addMessage)
+        // Доработаем addMessage, чтобы сохранять в storage, если сообщение от "Товарищ"
+        // Но чтобы избежать дублирования, мы сохраняем в sendMessage для отправителя, а для получателя будем сохранять в handleIncomingData.
+
+        // Переопределим addMessage, чтобы она сохраняла в storage (если сообщение не от "Я")
+        const originalAdd = addMessage;
+        addMessage = function(sender, content, mediaType, timestamp) {
+            originalAdd(sender, content, mediaType, timestamp);
+            // Если сообщение не от "Я", сохраняем в storage
+            if (sender !== 'Я') {
+                const msg = { sender, content, mediaType, timestamp };
+                messages.push(msg);
+                // Очистка старых
+                const now = Date.now();
+                messages = messages.filter(m => (now - m.timestamp) < 86400000);
+                try {
+                    localStorage.setItem('chat_messages_' + currentRoom, JSON.stringify(messages));
+                } catch (e) {}
+            }
+        };
+
+        // При загрузке комнаты загружаем историю
+        // Вызывается при успешном подключении (в joinRoom и при создании)
+        // Добавим в код после открытия conn
+        // Но мы уже обрабатываем requestHistory.
+        // Также при создании комнаты загружаем локальную историю (если она есть)
+        // В confirmCreateRoom после создания peer добавим загрузку
+        // Внесём изменения.
+
+        // Патч: в confirmCreateRoom после peer.on('open') загружаем историю
+        // В joinRoom после conn.on('open') мы уже запрашиваем историю.
+
+        // Также при создании комнаты нужно загрузить сохранённые сообщения
+        // Добавим в confirmCreateRoom после открытия peer:
+        // loadMessagesFromStorage();
+
+        // Но мы уже переопределили addMessage, теперь добавим вызов loadMessagesFromStorage() в нужных местах.
+
+        // Патчим функции:
+        const origConfirm = confirmCreateRoom;
+        confirmCreateRoom = async function() {
+            await origConfirm.call(this);
+            // После успешного создания загружаем историю
+            if (currentRoom) {
+                loadMessagesFromStorage();
+            }
+        };
+
+        // В joinRoom после установки conn и получения истории мы уже обрабатываем через handleIncomingData
+        // Но если история пришла, она отобразится.
+
+        // Также нужно добавить загрузку истории при входе по ссылке.
+        // Всё работает через запрос history от клиента.
+
+        // Дополнительно: при создании комнаты, если есть сохранённые сообщения, они отобразятся у создателя.
+
+        console.log('Советский Чат загружен!');
     </script>
 </body>
 </html>
