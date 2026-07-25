@@ -6,12 +6,8 @@
     <title>Советский Чат</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        /* ---------- Общий сброс ---------- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* ---------- Стили (те же, что и ранее, адаптированные) ---------- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Times New Roman', serif;
             background: #1a0808;
@@ -21,8 +17,6 @@
             justify-content: center;
             padding: 10px;
         }
-
-        /* ---------- Экран загрузки ---------- */
         #splashScreen {
             position: fixed;
             inset: 0;
@@ -35,13 +29,7 @@
             transition: opacity 1s ease;
         }
         #splashScreen.hidden { opacity: 0; pointer-events: none; }
-        .splash-content {
-            text-align: center;
-            color: #f5d742;
-            text-shadow: 0 0 30px #b22222;
-            animation: fadeInUp 1.5s ease;
-            padding: 20px;
-        }
+        .splash-content { text-align: center; color: #f5d742; text-shadow: 0 0 30px #b22222; animation: fadeInUp 1.5s ease; padding: 20px; }
         .splash-content h1 { font-size: 3rem; letter-spacing: 6px; }
         .splash-content .sub { font-size: 1.4rem; border-top: 2px solid #b8860b; border-bottom: 2px solid #b8860b; padding: 8px 20px; display: inline-block; }
         .splash-content .hammer-sickle { font-size: 4rem; display: block; margin-bottom: 15px; }
@@ -50,36 +38,15 @@
         @keyframes load { 0% { width: 0; } 100% { width: 100%; } }
         @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
 
-        /* ---------- Основное приложение ---------- */
-        #app {
-            width: 100%;
-            max-width: 1100px;
-            opacity: 0;
-            transition: opacity 1.2s ease;
-        }
+        #app { width: 100%; max-width: 1100px; opacity: 0; transition: opacity 1.2s ease; }
         #app.visible { opacity: 1; }
-
-        /* Фоновые декорации */
-        .bg-symbols {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .bg-symbols .symbol {
-            position: absolute;
-            font-size: 6rem;
-            opacity: 0.08;
-            color: #b8860b;
-            user-select: none;
-        }
+        .bg-symbols { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .bg-symbols .symbol { position: absolute; font-size: 6rem; opacity: 0.08; color: #b8860b; user-select: none; }
         .bg-symbols .symbol.tl { top: 10px; left: 10px; transform: rotate(-15deg); }
         .bg-symbols .symbol.tr { top: 10px; right: 10px; transform: rotate(15deg); }
         .bg-symbols .symbol.bl { bottom: 10px; left: 10px; transform: rotate(15deg); }
         .bg-symbols .symbol.br { bottom: 10px; right: 10px; transform: rotate(-15deg); }
 
-        /* Контейнер */
         .container {
             position: relative;
             z-index: 1;
@@ -90,30 +57,10 @@
             box-shadow: 0 0 60px rgba(255, 215, 0, 0.15);
             backdrop-filter: blur(6px);
         }
-
-        /* Заголовок */
         .header { text-align: center; margin-bottom: 15px; }
-        .header h1 {
-            font-size: 2.2rem;
-            color: #f5d742;
-            text-shadow: 0 0 20px #b22222;
-            letter-spacing: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .header .subtitle {
-            color: #d4af37;
-            font-size: 1rem;
-            border-top: 1px solid #b8860b;
-            border-bottom: 1px solid #b8860b;
-            padding: 4px 0;
-            letter-spacing: 1px;
-        }
+        .header h1 { font-size: 2.2rem; color: #f5d742; text-shadow: 0 0 20px #b22222; letter-spacing: 4px; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .header .subtitle { color: #d4af37; font-size: 1rem; border-top: 1px solid #b8860b; border-bottom: 1px solid #b8860b; padding: 4px 0; letter-spacing: 1px; }
 
-        /* Кнопки */
         .btn {
             background: #b22222;
             border: 2px solid #d4af37;
@@ -139,210 +86,49 @@
         .btn-secondary { background: #1a2a3a; border-color: #5a7a9a; box-shadow: 0 5px 0 #0a1a2a; }
         .btn-success { background: #2d6a2d; border-color: #8bca8b; box-shadow: 0 5px 0 #1a4a1a; }
         .btn-sm { padding: 10px 16px; font-size: 0.9rem; min-height: 44px; }
-        .flex-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
-            margin: 10px 0;
-        }
+        .flex-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; margin: 10px 0; }
 
-        /* Видео-сетка (скрыта по умолчанию) */
-        .video-grid {
-            display: none;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin: 15px 0;
-        }
+        .video-grid { display: none; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 15px 0; }
         .video-grid.active { display: flex; }
-        .video-box {
-            flex: 1 1 200px;
-            min-width: 140px;
-            background: #0a0505;
-            border: 2px solid #b8860b;
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            aspect-ratio: 4/3;
-        }
-        .video-box video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            background: #111;
-            display: block;
-        }
-        .video-box .label {
-            position: absolute;
-            bottom: 6px;
-            left: 6px;
-            background: rgba(0,0,0,0.7);
-            padding: 2px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            color: #f5d742;
-            border: 1px solid #b8860b;
-        }
+        .video-box { flex: 1 1 200px; min-width: 140px; background: #0a0505; border: 2px solid #b8860b; border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 4/3; }
+        .video-box video { width: 100%; height: 100%; object-fit: cover; background: #111; display: block; }
+        .video-box .label { position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.7); padding: 2px 12px; border-radius: 30px; font-size: 0.8rem; color: #f5d742; border: 1px solid #b8860b; }
 
-        /* Чат */
-        .chat-area {
-            display: none;
-            margin-top: 15px;
-            border-top: 2px solid #b8860b;
-            padding-top: 12px;
-        }
+        .chat-area { display: none; margin-top: 15px; border-top: 2px solid #b8860b; padding-top: 12px; }
         .chat-area.active { display: block; }
-        .chat-messages {
-            max-height: 200px;
-            overflow-y: auto;
-            background: rgba(0,0,0,0.4);
-            border-radius: 12px;
-            padding: 8px;
-            margin-bottom: 8px;
-            border: 1px solid #b8860b;
-        }
-        .chat-messages .msg {
-            background: rgba(30,15,15,0.8);
-            border-radius: 10px;
-            padding: 5px 10px;
-            margin-bottom: 5px;
-            color: #f5d742;
-            word-break: break-word;
-            font-size: 0.95rem;
-        }
+        .chat-messages { max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.4); border-radius: 12px; padding: 8px; margin-bottom: 8px; border: 1px solid #b8860b; }
+        .chat-messages .msg { background: rgba(30,15,15,0.8); border-radius: 10px; padding: 5px 10px; margin-bottom: 5px; color: #f5d742; word-break: break-word; font-size: 0.95rem; }
         .chat-messages .msg .sender { color: #d4af37; font-weight: bold; }
         .chat-messages .msg .time { color: #8a7a5a; font-size: 0.7rem; margin-left: 8px; }
-        .chat-messages .msg img, .chat-messages .msg video {
-            max-width: 120px;
-            border-radius: 8px;
-            margin-top: 4px;
-            border: 1px solid #b8860b;
-        }
-        .chat-input-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .chat-input-row input[type="text"] {
-            flex: 1;
-            background: #0a0505;
-            border: 2px solid #b8860b;
-            color: #f5d742;
-            padding: 10px 14px;
-            border-radius: 60px;
-            font-size: 1rem;
-            font-family: inherit;
-            min-width: 120px;
-            min-height: 44px;
-        }
+        .chat-messages .msg img, .chat-messages .msg video { max-width: 120px; border-radius: 8px; margin-top: 4px; border: 1px solid #b8860b; }
+        .chat-input-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .chat-input-row input[type="text"] { flex: 1; background: #0a0505; border: 2px solid #b8860b; color: #f5d742; padding: 10px 14px; border-radius: 60px; font-size: 1rem; font-family: inherit; min-width: 120px; min-height: 44px; }
         .chat-input-row input[type="text"]::placeholder { color: #6a5a3a; }
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-        .file-input-wrapper input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
+        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
+        .file-input-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
 
-        /* Панель управления звонком */
-        .call-controls {
-            display: none;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 10px 0;
-        }
+        .call-controls { display: none; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
         .call-controls.active { display: flex; }
 
-        /* Приглашение */
-        .invite-area {
-            display: none;
-            background: #1a1a0a;
-            border: 1px dashed #b8860b;
-            border-radius: 16px;
-            padding: 12px;
-            margin: 12px 0;
-            word-break: break-all;
-            font-size: 0.9rem;
-            color: #d4af37;
-        }
+        .invite-area { display: none; background: #1a1a0a; border: 1px dashed #b8860b; border-radius: 16px; padding: 12px; margin: 12px 0; word-break: break-all; font-size: 0.9rem; color: #d4af37; }
         .invite-area.active { display: block; }
         .invite-area .link-label { font-weight: bold; color: #b8860b; }
         .invite-area a { color: #f5d742; text-decoration: underline; }
         .timer { color: #ff6347; font-weight: bold; font-size: 1rem; }
 
-        /* Статус */
-        .status {
-            text-align: center;
-            font-size: 1rem;
-            padding: 10px;
-            border-radius: 60px;
-            background: rgba(0,0,0,0.5);
-            margin: 10px 0;
-            color: #f5d742;
-        }
+        .status { text-align: center; font-size: 1rem; padding: 10px; border-radius: 60px; background: rgba(0,0,0,0.5); margin: 10px 0; color: #f5d742; }
 
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
         .modal.active { display: flex; }
-        .modal-content {
-            background: #1a0a0a;
-            border: 3px solid #b8860b;
-            border-radius: 30px;
-            padding: 25px 20px;
-            max-width: 500px;
-            width: 100%;
-            color: #f5d742;
-            box-shadow: 0 0 50px rgba(255,215,0,0.3);
-        }
+        .modal-content { background: #1a0a0a; border: 3px solid #b8860b; border-radius: 30px; padding: 25px 20px; max-width: 500px; width: 100%; color: #f5d742; box-shadow: 0 0 50px rgba(255,215,0,0.3); }
         .modal-content h2 { text-align: center; margin-bottom: 15px; font-size: 1.6rem; }
         .modal-content label { display: block; margin: 10px 0 4px; font-size: 1rem; }
-        .modal-content input, .modal-content select {
-            width: 100%;
-            padding: 10px 14px;
-            background: #0a0505;
-            border: 2px solid #b8860b;
-            color: #f5d742;
-            border-radius: 60px;
-            font-size: 1rem;
-            font-family: inherit;
-            min-height: 44px;
-        }
+        .modal-content input, .modal-content select { width: 100%; padding: 10px 14px; background: #0a0505; border: 2px solid #b8860b; color: #f5d742; border-radius: 60px; font-size: 1rem; font-family: inherit; min-height: 44px; }
         .modal-content .btn { width: 100%; margin-top: 12px; }
 
-        .input-field {
-            background: #0a0505;
-            border: 2px solid #b8860b;
-            color: #f5d742;
-            padding: 12px 18px;
-            border-radius: 60px;
-            font-size: 1rem;
-            font-family: inherit;
-            min-width: 140px;
-            flex: 1;
-            min-height: 44px;
-        }
+        .input-field { background: #0a0505; border: 2px solid #b8860b; color: #f5d742; padding: 12px 18px; border-radius: 60px; font-size: 1rem; font-family: inherit; min-width: 140px; flex: 1; min-height: 44px; }
         .input-field::placeholder { color: #6a5a3a; }
 
-        /* Адаптация для мобильных */
         @media (max-width: 600px) {
             .header h1 { font-size: 1.8rem; }
             .video-box { flex: 1 1 130px; min-width: 100px; }
@@ -480,12 +266,27 @@
     </div>
 
     <script>
-        // ========== КОНФИГУРАЦИЯ ==========
+        // ========== КОНФИГУРАЦИЯ С УЛУЧШЕННЫМИ ICE-СЕРВЕРАМИ ==========
         const PEER_OPTIONS = {
             config: {
                 iceServers: [
+                    // Множество STUN-серверов Google
                     { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' }
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' },
+                    { urls: 'stun:stun3.l.google.com:19302' },
+                    { urls: 'stun:stun4.l.google.com:19302' },
+                    // Публичный TURN-сервер (бесплатный, с ограничениями)
+                    {
+                        urls: 'turn:openrelay.metered.ca:80',
+                        username: 'openrelayproject',
+                        credential: 'openrelayproject'
+                    },
+                    {
+                        urls: 'turn:openrelay.metered.ca:443',
+                        username: 'openrelayproject',
+                        credential: 'openrelayproject'
+                    }
                 ]
             }
         };
@@ -626,10 +427,10 @@
         async function getMedia(requireVideo = true) {
             let stream = null;
             try {
-                // Пытаемся запросить и видео, и аудио
                 stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
                 hasVideo = true;
                 hasAudio = true;
+                console.log('Получен поток с видео и аудио');
                 return stream;
             } catch (e1) {
                 console.warn('Видео+аудио не доступны, пробуем только аудио:', e1.message);
@@ -637,6 +438,7 @@
                     stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
                     hasVideo = false;
                     hasAudio = true;
+                    console.log('Получен поток только с аудио');
                     return stream;
                 } catch (e2) {
                     console.warn('Аудио не доступно, пробуем только видео:', e2.message);
@@ -644,10 +446,10 @@
                         stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
                         hasVideo = true;
                         hasAudio = false;
+                        console.log('Получен поток только с видео');
                         return stream;
                     } catch (e3) {
                         console.warn('Ничего не доступно, создаём пустой поток:', e3.message);
-                        // Создаём пустой MediaStream (только чат)
                         stream = new MediaStream();
                         hasVideo = false;
                         hasAudio = false;
@@ -664,7 +466,6 @@
             document.getElementById('callControls').classList.add('active');
             document.getElementById('chatArea').classList.add('active');
             document.getElementById('inviteArea').classList.add('active');
-            // Если видео нет, скрываем локальное видео (оно будет чёрным)
             if (!hasVideo) {
                 localVideo.style.display = 'none';
                 remoteVideo.style.display = 'none';
@@ -712,19 +513,28 @@
                     localVideo.srcObject = null;
                 }
 
+                console.log('Создаём Peer с ID:', roomId);
                 peer = new Peer(roomId, PEER_OPTIONS);
                 await new Promise((resolve, reject) => {
-                    peer.on('open', resolve);
-                    peer.on('error', reject);
+                    peer.on('open', (id) => {
+                        console.log('Peer открыт, ID:', id);
+                        resolve();
+                    });
+                    peer.on('error', (err) => {
+                        console.error('Ошибка Peer:', err);
+                        reject(err);
+                    });
                 });
 
                 peer.on('connection', (dataConn) => {
+                    console.log('Входящее DataConnection от:', dataConn.peer);
                     if (conn) {
                         dataConn.close();
                         return;
                     }
                     conn = dataConn;
                     conn.on('open', () => {
+                        console.log('DataConnection открыто');
                         statusDisplay.textContent = '✅ Соединение для чата установлено!';
                         sendMessageHistory();
                     });
@@ -732,12 +542,14 @@
                         handleIncomingData(data);
                     });
                     conn.on('close', () => {
+                        console.log('DataConnection закрыто');
                         conn = null;
                         statusDisplay.textContent = '⚠️ Соединение чата разорвано.';
                     });
                 });
 
                 peer.on('call', (incomingCall) => {
+                    console.log('Входящий звонок от:', incomingCall.peer);
                     if (call) {
                         incomingCall.answer();
                         return;
@@ -745,14 +557,20 @@
                     call = incomingCall;
                     call.answer(localStream);
                     call.on('stream', (remote) => {
+                        console.log('Получен удалённый поток');
                         remoteStream = remote;
                         remoteVideo.srcObject = remote;
                         statusDisplay.textContent = '📞 Товарищ на связи!';
                     });
                     call.on('close', () => {
+                        console.log('Звонок закрыт');
                         remoteVideo.srcObject = null;
                         statusDisplay.textContent = '🔴 Сеанс завершён.';
                         call = null;
+                    });
+                    call.on('error', (err) => {
+                        console.error('Ошибка звонка:', err);
+                        statusDisplay.textContent = '❌ Ошибка звонка: ' + err.message;
                     });
                 });
 
@@ -793,14 +611,23 @@
                     localVideo.srcObject = null;
                 }
 
+                console.log('Создаём Peer со случайным ID');
                 peer = new Peer(PEER_OPTIONS);
                 await new Promise((resolve, reject) => {
-                    peer.on('open', resolve);
-                    peer.on('error', reject);
+                    peer.on('open', (id) => {
+                        console.log('Peer открыт, ID:', id);
+                        resolve();
+                    });
+                    peer.on('error', (err) => {
+                        console.error('Ошибка Peer:', err);
+                        reject(err);
+                    });
                 });
 
+                console.log('Подключаемся к комнате:', roomId);
                 conn = peer.connect(roomId);
                 conn.on('open', () => {
+                    console.log('DataConnection открыто');
                     statusDisplay.textContent = '✅ Соединение с комнатой установлено.';
                     conn.send({ type: 'requestHistory' });
                 });
@@ -808,21 +635,33 @@
                     handleIncomingData(data);
                 });
                 conn.on('close', () => {
+                    console.log('DataConnection закрыто');
                     conn = null;
                     statusDisplay.textContent = '⚠️ Соединение чата разорвано.';
                 });
+                conn.on('error', (err) => {
+                    console.error('Ошибка DataConnection:', err);
+                    statusDisplay.textContent = '❌ Ошибка соединения чата: ' + err.message;
+                });
 
+                console.log('Инициируем звонок к комнате:', roomId);
                 const callObj = peer.call(roomId, localStream);
                 call = callObj;
                 call.on('stream', (remote) => {
+                    console.log('Получен удалённый поток');
                     remoteStream = remote;
                     remoteVideo.srcObject = remote;
                     statusDisplay.textContent = '📞 Товарищ на связи!';
                 });
                 call.on('close', () => {
+                    console.log('Звонок закрыт');
                     remoteVideo.srcObject = null;
                     statusDisplay.textContent = '🔴 Сеанс завершён.';
                     call = null;
+                });
+                call.on('error', (err) => {
+                    console.error('Ошибка звонка:', err);
+                    statusDisplay.textContent = '❌ Ошибка звонка: ' + err.message;
                 });
 
                 showCallBlock();
@@ -838,6 +677,7 @@
 
         // ========== ОБРАБОТКА ВХОДЯЩИХ ДАННЫХ ==========
         function handleIncomingData(data) {
+            console.log('Получены данные:', data);
             if (typeof data === 'string') {
                 try {
                     data = JSON.parse(data);
@@ -876,6 +716,7 @@
                 msg.content = fileData;
             }
             conn.send(JSON.stringify(msg));
+            console.log('Отправлено сообщение:', msg);
             addMessage('Я', text, mediaType, msg.timestamp);
             saveMessageToStorage('Я', text, mediaType, msg.timestamp);
         }
@@ -887,6 +728,7 @@
                 type: 'history',
                 messages: history
             }));
+            console.log('Отправлена история, сообщений:', history.length);
         }
 
         // ========== ДОБАВЛЕНИЕ СООБЩЕНИЯ В UI ==========
