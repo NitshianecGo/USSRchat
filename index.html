@@ -6,80 +6,360 @@
     <title>Советский Чат</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        /* ... все стили как в предыдущей версии, без изменений ... */
-        /* (Для краткости оставлю тот же CSS, но он уже был рабочий) */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Times New Roman', serif; background: #1a0808; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        #splashScreen { position: fixed; inset: 0; background: radial-gradient(circle at 30% 40%, #4a1a1a, #0a0505); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 1s ease; }
+        /* ---------- Общий сброс ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Times New Roman', serif;
+            background: #1a0808;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        /* ---------- Экран загрузки ---------- */
+        #splashScreen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, #4a1a1a, #0a0505);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 1s ease;
+        }
         #splashScreen.hidden { opacity: 0; pointer-events: none; }
-        .splash-content { text-align: center; color: #f5d742; text-shadow: 0 0 30px #b22222; animation: fadeInUp 1.5s ease; }
-        .splash-content h1 { font-size: 4rem; letter-spacing: 8px; margin-bottom: 10px; }
-        .splash-content .sub { font-size: 1.8rem; border-top: 2px solid #b8860b; border-bottom: 2px solid #b8860b; padding: 10px 30px; display: inline-block; margin-top: 10px; }
-        .splash-content .hammer-sickle { font-size: 5rem; display: block; margin-bottom: 20px; }
-        .loading-bar { width: 200px; height: 4px; background: #2a1a1a; border-radius: 2px; margin: 30px auto 0; overflow: hidden; border: 1px solid #b8860b; }
+        .splash-content {
+            text-align: center;
+            color: #f5d742;
+            text-shadow: 0 0 30px #b22222;
+            animation: fadeInUp 1.5s ease;
+            padding: 20px;
+        }
+        .splash-content h1 { font-size: 3rem; letter-spacing: 6px; }
+        .splash-content .sub { font-size: 1.4rem; border-top: 2px solid #b8860b; border-bottom: 2px solid #b8860b; padding: 8px 20px; display: inline-block; }
+        .splash-content .hammer-sickle { font-size: 4rem; display: block; margin-bottom: 15px; }
+        .loading-bar { width: 180px; height: 4px; background: #2a1a1a; border-radius: 2px; margin: 20px auto 0; overflow: hidden; border: 1px solid #b8860b; }
         .loading-bar .fill { height: 100%; width: 0; background: linear-gradient(90deg, #b8860b, #f5d742); animation: load 2s ease-in-out forwards; }
         @keyframes load { 0% { width: 0; } 100% { width: 100%; } }
-        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
-        #app { width: 100%; max-width: 1100px; padding: 20px; opacity: 0; transition: opacity 1.2s ease; }
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* ---------- Основное приложение ---------- */
+        #app {
+            width: 100%;
+            max-width: 1100px;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
         #app.visible { opacity: 1; }
-        .bg-symbols { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-        .bg-symbols .symbol { position: absolute; font-size: 8rem; opacity: 0.08; color: #b8860b; transform: rotate(-15deg); user-select: none; }
-        .bg-symbols .symbol.tl { top: 10px; left: 10px; }
+
+        /* Фоновые декорации */
+        .bg-symbols {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-symbols .symbol {
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0.08;
+            color: #b8860b;
+            user-select: none;
+        }
+        .bg-symbols .symbol.tl { top: 10px; left: 10px; transform: rotate(-15deg); }
         .bg-symbols .symbol.tr { top: 10px; right: 10px; transform: rotate(15deg); }
         .bg-symbols .symbol.bl { bottom: 10px; left: 10px; transform: rotate(15deg); }
         .bg-symbols .symbol.br { bottom: 10px; right: 10px; transform: rotate(-15deg); }
-        .container { position: relative; z-index: 1; background: rgba(20, 8, 8, 0.85); border: 3px solid #b8860b; border-radius: 30px; padding: 25px 20px; box-shadow: 0 0 60px rgba(255, 215, 0, 0.15); backdrop-filter: blur(6px); margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { font-size: 2.8rem; color: #f5d742; text-shadow: 0 0 20px #b22222; letter-spacing: 6px; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .header .subtitle { color: #d4af37; font-size: 1.2rem; border-top: 1px solid #b8860b; border-bottom: 1px solid #b8860b; padding: 6px 0; margin-top: 5px; letter-spacing: 2px; }
-        .btn { background: #b22222; border: 2px solid #d4af37; color: #f5d742; font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.1rem; padding: 12px 28px; border-radius: 60px; cursor: pointer; transition: all 0.2s; text-shadow: 0 1px 3px #000; box-shadow: 0 5px 0 #6b0f0f; letter-spacing: 1px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn:hover { transform: scale(1.03); background: #cc3333; box-shadow: 0 7px 0 #6b0f0f; }
+
+        /* Контейнер */
+        .container {
+            position: relative;
+            z-index: 1;
+            background: rgba(20, 8, 8, 0.85);
+            border: 3px solid #b8860b;
+            border-radius: 30px;
+            padding: 20px 15px;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.15);
+            backdrop-filter: blur(6px);
+        }
+
+        /* Заголовок */
+        .header { text-align: center; margin-bottom: 15px; }
+        .header h1 {
+            font-size: 2.2rem;
+            color: #f5d742;
+            text-shadow: 0 0 20px #b22222;
+            letter-spacing: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .header .subtitle {
+            color: #d4af37;
+            font-size: 1rem;
+            border-top: 1px solid #b8860b;
+            border-bottom: 1px solid #b8860b;
+            padding: 4px 0;
+            letter-spacing: 1px;
+        }
+
+        /* Кнопки */
+        .btn {
+            background: #b22222;
+            border: 2px solid #d4af37;
+            color: #f5d742;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 14px 24px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-shadow: 0 1px 3px #000;
+            box-shadow: 0 5px 0 #6b0f0f;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 54px;
+            touch-action: manipulation;
+        }
         .btn:active { transform: translateY(5px); box-shadow: 0 2px 0 #6b0f0f; }
         .btn-secondary { background: #1a2a3a; border-color: #5a7a9a; box-shadow: 0 5px 0 #0a1a2a; }
-        .btn-secondary:hover { background: #2a3a5a; }
         .btn-success { background: #2d6a2d; border-color: #8bca8b; box-shadow: 0 5px 0 #1a4a1a; }
-        .btn-success:hover { background: #3a8a3a; }
-        .btn-sm { padding: 8px 18px; font-size: 0.95rem; }
-        .flex-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; margin: 10px 0; }
-        .video-grid { display: none; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 15px 0; }
+        .btn-sm { padding: 10px 16px; font-size: 0.9rem; min-height: 44px; }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        /* Видео-сетка (скрыта по умолчанию) */
+        .video-grid {
+            display: none;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 15px 0;
+        }
         .video-grid.active { display: flex; }
-        .video-box { flex: 1 1 240px; min-width: 180px; background: #0a0505; border: 2px solid #b8860b; border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 4/3; }
-        .video-box video { width: 100%; height: 100%; object-fit: cover; background: #111; display: block; }
-        .video-box .label { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); padding: 4px 16px; border-radius: 30px; font-size: 0.9rem; color: #f5d742; border: 1px solid #b8860b; }
-        .chat-area { display: none; margin-top: 20px; border-top: 2px solid #b8860b; padding-top: 15px; }
+        .video-box {
+            flex: 1 1 200px;
+            min-width: 140px;
+            background: #0a0505;
+            border: 2px solid #b8860b;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 4/3;
+        }
+        .video-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #111;
+            display: block;
+        }
+        .video-box .label {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            background: rgba(0,0,0,0.7);
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: #f5d742;
+            border: 1px solid #b8860b;
+        }
+
+        /* Чат */
+        .chat-area {
+            display: none;
+            margin-top: 15px;
+            border-top: 2px solid #b8860b;
+            padding-top: 12px;
+        }
         .chat-area.active { display: block; }
-        .chat-messages { max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.4); border-radius: 12px; padding: 10px; margin-bottom: 10px; border: 1px solid #b8860b; }
-        .chat-messages .msg { background: rgba(30,15,15,0.8); border-radius: 10px; padding: 6px 12px; margin-bottom: 6px; color: #f5d742; word-break: break-word; }
+        .chat-messages {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #b8860b;
+        }
+        .chat-messages .msg {
+            background: rgba(30,15,15,0.8);
+            border-radius: 10px;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+            color: #f5d742;
+            word-break: break-word;
+            font-size: 0.95rem;
+        }
         .chat-messages .msg .sender { color: #d4af37; font-weight: bold; }
-        .chat-messages .msg .time { color: #8a7a5a; font-size: 0.7rem; margin-left: 10px; }
-        .chat-messages .msg img { max-width: 150px; border-radius: 8px; margin-top: 4px; border: 1px solid #b8860b; }
-        .chat-messages .msg video { max-width: 150px; max-height: 150px; border-radius: 8px; margin-top: 4px; border: 1px solid #b8860b; }
-        .chat-input-row { display: flex; gap: 10px; flex-wrap: wrap; }
-        .chat-input-row input[type="text"] { flex: 1; background: #0a0505; border: 2px solid #b8860b; color: #f5d742; padding: 10px 16px; border-radius: 60px; font-size: 1rem; font-family: inherit; min-width: 150px; }
+        .chat-messages .msg .time { color: #8a7a5a; font-size: 0.7rem; margin-left: 8px; }
+        .chat-messages .msg img, .chat-messages .msg video {
+            max-width: 120px;
+            border-radius: 8px;
+            margin-top: 4px;
+            border: 1px solid #b8860b;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .chat-input-row input[type="text"] {
+            flex: 1;
+            background: #0a0505;
+            border: 2px solid #b8860b;
+            color: #f5d742;
+            padding: 10px 14px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-family: inherit;
+            min-width: 120px;
+            min-height: 44px;
+        }
         .chat-input-row input[type="text"]::placeholder { color: #6a5a3a; }
-        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
-        .file-input-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
-        .call-controls { display: none; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 10px 0; }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        /* Панель управления звонком */
+        .call-controls {
+            display: none;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
         .call-controls.active { display: flex; }
-        .invite-area { display: none; background: #1a1a0a; border: 1px dashed #b8860b; border-radius: 16px; padding: 15px; margin: 15px 0; word-break: break-all; font-size: 0.95rem; color: #d4af37; }
+
+        /* Приглашение */
+        .invite-area {
+            display: none;
+            background: #1a1a0a;
+            border: 1px dashed #b8860b;
+            border-radius: 16px;
+            padding: 12px;
+            margin: 12px 0;
+            word-break: break-all;
+            font-size: 0.9rem;
+            color: #d4af37;
+        }
         .invite-area.active { display: block; }
         .invite-area .link-label { font-weight: bold; color: #b8860b; }
         .invite-area a { color: #f5d742; text-decoration: underline; }
-        .timer { color: #ff6347; font-weight: bold; font-size: 1.1rem; }
-        .status { text-align: center; font-size: 1.1rem; padding: 10px; border-radius: 60px; background: rgba(0,0,0,0.5); margin: 10px 0; color: #f5d742; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .timer { color: #ff6347; font-weight: bold; font-size: 1rem; }
+
+        /* Статус */
+        .status {
+            text-align: center;
+            font-size: 1rem;
+            padding: 10px;
+            border-radius: 60px;
+            background: rgba(0,0,0,0.5);
+            margin: 10px 0;
+            color: #f5d742;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
         .modal.active { display: flex; }
-        .modal-content { background: #1a0a0a; border: 3px solid #b8860b; border-radius: 30px; padding: 30px; max-width: 500px; width: 90%; color: #f5d742; box-shadow: 0 0 50px rgba(255,215,0,0.3); }
-        .modal-content h2 { text-align: center; margin-bottom: 20px; }
-        .modal-content label { display: block; margin: 12px 0 4px; font-size: 1.1rem; }
-        .modal-content input, .modal-content select { width: 100%; padding: 10px 16px; background: #0a0505; border: 2px solid #b8860b; color: #f5d742; border-radius: 60px; font-size: 1rem; font-family: inherit; }
-        .modal-content .btn { width: 100%; margin-top: 15px; }
-        .input-field { background: #0a0505; border: 2px solid #b8860b; color: #f5d742; padding: 12px 20px; border-radius: 60px; font-size: 1rem; font-family: inherit; min-width: 200px; flex: 1; }
+        .modal-content {
+            background: #1a0a0a;
+            border: 3px solid #b8860b;
+            border-radius: 30px;
+            padding: 25px 20px;
+            max-width: 500px;
+            width: 100%;
+            color: #f5d742;
+            box-shadow: 0 0 50px rgba(255,215,0,0.3);
+        }
+        .modal-content h2 { text-align: center; margin-bottom: 15px; font-size: 1.6rem; }
+        .modal-content label { display: block; margin: 10px 0 4px; font-size: 1rem; }
+        .modal-content input, .modal-content select {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0a0505;
+            border: 2px solid #b8860b;
+            color: #f5d742;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-family: inherit;
+            min-height: 44px;
+        }
+        .modal-content .btn { width: 100%; margin-top: 12px; }
+
+        .input-field {
+            background: #0a0505;
+            border: 2px solid #b8860b;
+            color: #f5d742;
+            padding: 12px 18px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-family: inherit;
+            min-width: 140px;
+            flex: 1;
+            min-height: 44px;
+        }
         .input-field::placeholder { color: #6a5a3a; }
-        @media (max-width: 600px) { .header h1 { font-size: 2rem; } .video-box { flex: 1 1 140px; min-width: 120px; } .btn { padding: 10px 18px; font-size: 0.95rem; } }
+
+        /* Адаптация для мобильных */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8rem; }
+            .video-box { flex: 1 1 130px; min-width: 100px; }
+            .btn { font-size: 0.9rem; padding: 12px 18px; min-height: 48px; }
+            .btn-sm { padding: 8px 14px; min-height: 40px; font-size: 0.85rem; }
+            .modal-content { padding: 20px 15px; }
+            .splash-content h1 { font-size: 2.2rem; }
+            .splash-content .sub { font-size: 1.2rem; }
+        }
+        @media (max-width: 400px) {
+            .video-box { flex: 1 1 100px; min-width: 80px; }
+            .chat-input-row input[type="text"] { min-width: 80px; }
+        }
     </style>
 </head>
 <body>
+
     <!-- ЭКРАН ЗАГРУЗКИ -->
     <div id="splashScreen">
         <div class="splash-content">
@@ -90,7 +370,7 @@
         </div>
     </div>
 
-    <!-- ФОН -->
+    <!-- ФОН С СИМВОЛАМИ -->
     <div class="bg-symbols">
         <div class="symbol tl">☭</div>
         <div class="symbol tr">☭</div>
@@ -98,7 +378,7 @@
         <div class="symbol br">☭</div>
     </div>
 
-    <!-- МОДАЛКА ДЛЯ СОЗДАНИЯ КОМНАТЫ -->
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ СОЗДАНИЯ КОМНАТЫ -->
     <div id="createModal" class="modal">
         <div class="modal-content">
             <h2>☭ Создание комнаты</h2>
@@ -108,7 +388,7 @@
             <input type="text" id="roomPasswordInput" placeholder="Пароль">
             <label>Количество человек</label>
             <input type="number" id="roomMaxUsers" value="2" min="2" max="10">
-            <label>Время жизни комнаты (минут)</label>
+            <label>Время жизни (минут)</label>
             <select id="roomLifetime">
                 <option value="5">5</option>
                 <option value="15" selected>15</option>
@@ -151,6 +431,7 @@
 
             <!-- Блок звонка и чата (скрыт) -->
             <div id="callBlock" class="block-call" style="display: none;">
+
                 <div class="video-grid" id="videoGrid">
                     <div class="video-box">
                         <video id="localVideo" autoplay muted playsinline></video>
@@ -161,11 +442,13 @@
                         <div class="label">Товарищ</div>
                     </div>
                 </div>
+
                 <div class="call-controls" id="callControls">
                     <button class="btn btn-sm" id="toggleAudioBtn">🔇 Заглушить</button>
                     <button class="btn btn-sm" id="toggleVideoBtn">📷 Выключить</button>
                     <button class="btn btn-secondary btn-sm" id="hangupBtn">⛔ Прервать</button>
                 </div>
+
                 <div class="chat-area" id="chatArea">
                     <div class="chat-messages" id="chatMessages"></div>
                     <div class="chat-input-row">
@@ -177,18 +460,20 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="invite-area" id="inviteArea">
                     <div><span class="link-label">🔗 Пригласительная ссылка (действительна 5 мин):</span></div>
                     <div><a id="inviteLink" href="#" target="_blank">Ссылка</a></div>
-                    <div class="flex-row" style="gap:10px; margin-top:8px;">
+                    <div class="flex-row" style="gap:8px; margin-top:6px;">
                         <button class="btn btn-secondary btn-sm" id="copyLinkBtn">📋 Копировать</button>
                         <button class="btn btn-secondary btn-sm" id="refreshLinkBtn">🔄 Обновить</button>
                     </div>
-                    <div style="font-size:0.9rem; color:#b8860b; margin-top:6px;">
-                        Токен обновляется каждые 5 мин. Старая ссылка станет недействительной.
+                    <div style="font-size:0.85rem; color:#b8860b; margin-top:4px;">
+                        Токен обновляется каждые 5 мин.
                         <span id="timerDisplay" class="timer">(до смены: 5:00)</span>
                     </div>
                 </div>
+
                 <div class="status" id="statusDisplay">⏳ Ожидание соединения...</div>
             </div>
         </div>
@@ -259,6 +544,8 @@
         let roomLifetimeMs = 15 * 60000;
         let lifetimeTimer = null;
         let messages = [];
+        let hasVideo = false;
+        let hasAudio = false;
 
         // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
         function getCurrentWindow() {
@@ -301,6 +588,7 @@
 
         function startTimer() {
             if (timerInterval) clearInterval(timerInterval);
+
             function update() {
                 const now = Date.now();
                 const msInWindow = 300000;
@@ -321,55 +609,51 @@
             timerInterval = setInterval(update, 1000);
         }
 
-        // ========== ПОЛУЧЕНИЕ МЕДИА С ОБРАБОТКОЙ ОШИБОК ==========
-        async function requestMedia(audio = true, video = true) {
-            try {
-                const constraints = { audio: audio, video: video };
-                const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                return stream;
-            } catch (err) {
-                console.warn('Ошибка получения медиа:', err);
-                // Если ошибка, пробуем только аудио
-                if (video && !audio) {
-                    try {
-                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                        return stream;
-                    } catch (e2) {
-                        console.warn('Не удалось получить даже аудио');
-                    }
-                }
-                // Если ошибка, пробуем только видео
-                if (!video && audio) {
-                    try {
-                        const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
-                        return stream;
-                    } catch (e2) {
-                        console.warn('Не удалось получить даже видео');
-                    }
-                }
-                // Если ничего не вышло, возвращаем null
-                return null;
-            }
-        }
-
-        // ========== ПРОВЕРКА УСТРОЙСТВ С ПОДРОБНЫМ СООБЩЕНИЕМ ==========
+        // ========== ПРОВЕРКА УСТРОЙСТВ ==========
         async function testDevices() {
             statusInit.textContent = '🔍 Проверка устройств...';
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
                 stream.getTracks().forEach(t => t.stop());
-                statusInit.textContent = '✅ Все устройства работают! (камера и микрофон доступны)';
+                statusInit.textContent = '✅ Все устройства работают!';
             } catch (e) {
-                let msg = '❌ Ошибка: ';
-                if (e.message.includes('NotFoundError') || e.message.includes('Requested device not found')) {
-                    msg += 'Устройства не найдены. Проверьте подключение камеры и микрофона.';
-                } else if (e.message.includes('NotAllowedError')) {
-                    msg += 'Доступ запрещён. Разрешите доступ в настройках браузера.';
-                } else {
-                    msg += e.message;
+                statusInit.textContent = '⚠️ Частичная ошибка: ' + e.message + '. Попробуйте войти без видео.';
+                console.warn(e);
+            }
+        }
+
+        // ========== МЕДИА с отказоустойчивостью ==========
+        async function getMedia(requireVideo = true) {
+            let stream = null;
+            try {
+                // Пытаемся запросить и видео, и аудио
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+                hasVideo = true;
+                hasAudio = true;
+                return stream;
+            } catch (e1) {
+                console.warn('Видео+аудио не доступны, пробуем только аудио:', e1.message);
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    hasVideo = false;
+                    hasAudio = true;
+                    return stream;
+                } catch (e2) {
+                    console.warn('Аудио не доступно, пробуем только видео:', e2.message);
+                    try {
+                        stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
+                        hasVideo = true;
+                        hasAudio = false;
+                        return stream;
+                    } catch (e3) {
+                        console.warn('Ничего не доступно, создаём пустой поток:', e3.message);
+                        // Создаём пустой MediaStream (только чат)
+                        stream = new MediaStream();
+                        hasVideo = false;
+                        hasAudio = false;
+                        return stream;
+                    }
                 }
-                statusInit.textContent = msg;
-                console.error(e);
             }
         }
 
@@ -380,6 +664,14 @@
             document.getElementById('callControls').classList.add('active');
             document.getElementById('chatArea').classList.add('active');
             document.getElementById('inviteArea').classList.add('active');
+            // Если видео нет, скрываем локальное видео (оно будет чёрным)
+            if (!hasVideo) {
+                localVideo.style.display = 'none';
+                remoteVideo.style.display = 'none';
+            } else {
+                localVideo.style.display = 'block';
+                remoteVideo.style.display = 'block';
+            }
         }
 
         function hideCallBlock() {
@@ -388,6 +680,8 @@
             document.getElementById('callControls').classList.remove('active');
             document.getElementById('chatArea').classList.remove('active');
             document.getElementById('inviteArea').classList.remove('active');
+            localVideo.style.display = 'block';
+            remoteVideo.style.display = 'block';
         }
 
         // ========== СОЗДАНИЕ КОМНАТЫ ==========
@@ -406,25 +700,17 @@
 
             try {
                 statusInit.textContent = '🛠 Создаём комнату...';
-
-                // Пытаемся получить медиа
-                const stream = await requestMedia(true, true);
-                if (stream) {
-                    localStream = stream;
-                    localVideo.srcObject = stream;
-                } else {
-                    // Если не удалось получить медиа, работаем без видео/аудио (только чат)
-                    statusInit.textContent = '⚠️ Не удалось получить доступ к камере/микрофону. Будет доступен только чат.';
-                    // Создаём пустой поток (без треков)
-                    localStream = null;
-                    // Видео-окна скроем или покажем заглушку
-                    document.getElementById('videoGrid').style.display = 'none';
-                }
-
                 const roomId = 'chat-' + Math.random().toString(36).substring(2, 10);
                 currentRoom = roomId;
                 isInitiator = true;
-                roomCreatedAt = Date.now();
+
+                const stream = await getMedia();
+                localStream = stream;
+                if (hasVideo) {
+                    localVideo.srcObject = stream;
+                } else {
+                    localVideo.srcObject = null;
+                }
 
                 peer = new Peer(roomId, PEER_OPTIONS);
                 await new Promise((resolve, reject) => {
@@ -452,11 +738,6 @@
                 });
 
                 peer.on('call', (incomingCall) => {
-                    if (!localStream) {
-                        // Если нет локального потока, отвечаем без медиа
-                        incomingCall.answer();
-                        return;
-                    }
                     if (call) {
                         incomingCall.answer();
                         return;
@@ -480,7 +761,6 @@
                 startTimer();
                 statusDisplay.textContent = '⏳ Ожидаем подключения товарища...';
                 statusInit.textContent = 'Готов к связи';
-
                 startLifetimeTimer();
                 loadMessagesFromStorage();
 
@@ -498,22 +778,19 @@
                     return;
                 }
                 if (!isTokenValid(roomId, token)) {
-                    statusInit.textContent = '❌ Недействительная ссылка.';
+                    statusInit.textContent = '❌ Недействительная ссылка. Попросите товарища обновить приглашение.';
                     return;
                 }
 
                 currentRoom = roomId;
                 isInitiator = false;
 
-                // Пытаемся получить медиа
-                const stream = await requestMedia(true, true);
-                if (stream) {
-                    localStream = stream;
+                const stream = await getMedia();
+                localStream = stream;
+                if (hasVideo) {
                     localVideo.srcObject = stream;
                 } else {
-                    statusInit.textContent = '⚠️ Не удалось получить доступ к камере/микрофону. Будет доступен только чат.';
-                    localStream = null;
-                    document.getElementById('videoGrid').style.display = 'none';
+                    localVideo.srcObject = null;
                 }
 
                 peer = new Peer(PEER_OPTIONS);
@@ -535,27 +812,21 @@
                     statusDisplay.textContent = '⚠️ Соединение чата разорвано.';
                 });
 
-                // Совершаем звонок, только если есть локальный поток
-                if (localStream) {
-                    const callObj = peer.call(roomId, localStream);
-                    call = callObj;
-                    call.on('stream', (remote) => {
-                        remoteStream = remote;
-                        remoteVideo.srcObject = remote;
-                        statusDisplay.textContent = '📞 Товарищ на связи!';
-                    });
-                    call.on('close', () => {
-                        remoteVideo.srcObject = null;
-                        statusDisplay.textContent = '🔴 Сеанс завершён.';
-                        call = null;
-                    });
-                } else {
-                    // Если нет потока, просто устанавливаем чат
-                    statusDisplay.textContent = '💬 Соединение для чата установлено. Видео/аудио недоступны.';
-                }
+                const callObj = peer.call(roomId, localStream);
+                call = callObj;
+                call.on('stream', (remote) => {
+                    remoteStream = remote;
+                    remoteVideo.srcObject = remote;
+                    statusDisplay.textContent = '📞 Товарищ на связи!';
+                });
+                call.on('close', () => {
+                    remoteVideo.srcObject = null;
+                    statusDisplay.textContent = '🔴 Сеанс завершён.';
+                    call = null;
+                });
 
                 showCallBlock();
-                document.getElementById('inviteArea').classList.remove('active'); // скрываем приглашение для гостя
+                document.getElementById('inviteArea').classList.remove('active');
                 statusDisplay.textContent = '⏳ Устанавливаем соединение...';
                 statusInit.textContent = 'Готов к связи';
 
@@ -627,7 +898,7 @@
             if (mediaType === 'image') {
                 displayContent = `<img src="${content}" alt="Изображение" />`;
             } else if (mediaType === 'video') {
-                displayContent = `<video src="${content}" controls style="max-width:150px;max-height:150px;"></video>`;
+                displayContent = `<video src="${content}" controls style="max-width:120px;max-height:120px;"></video>`;
             }
             div.innerHTML = `<span class="sender">${sender}</span> <span class="time">${timeStr}</span><br>${displayContent}`;
             chatMessages.appendChild(div);
