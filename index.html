@@ -7,17 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
-:root{
-  --amber:#ffb642;--amber-dim:#8a6423;--green:#7dff8a;
-  --rust:#5c3a21;--bg:#0a0908;--panel:#14110d;--red:#ff4b3a;
-}
+:root{--amber:#ffb642;--amber-dim:#8a6423;--green:#7dff8a;--rust:#5c3a21;--bg:#0a0908;--red:#ff4b3a}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
-body{
-  background:var(--bg);color:#d8cbb0;font-family:'Oswald',sans-serif;
+body{background:var(--bg);color:#d8cbb0;font-family:'Oswald',sans-serif;
   background-image:radial-gradient(ellipse at 30% 20%,rgba(255,182,66,.04),transparent 50%),
-  radial-gradient(ellipse at 80% 90%,rgba(92,58,33,.12),transparent 60%);
-}
+  radial-gradient(ellipse at 80% 90%,rgba(92,58,33,.12),transparent 60%)}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9001;
@@ -25,57 +20,44 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9001;
 #noise{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:8999;opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
   animation:grain .4s steps(4) infinite}
-@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-2%,3%)}50%{transform:translate(3%,-2%)}75%{transform:translate(-3%,-3%)}100%{transform:translate(2%,2%)}}
+@keyframes grain{0%{transform:translate(0)}25%{transform:translate(-2%,3%)}50%{transform:translate(3%,-2%)}75%{transform:translate(-3%,-3%)}100%{transform:translate(2%,2%)}}
 @keyframes flicker{0%,95%,100%{opacity:1}96%{opacity:.4}97%{opacity:.9}98%{opacity:.2}99%{opacity:.8}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:24px;transition:opacity .6s;z-index:10}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;transition:opacity .6s;z-index:10}
 .hidden{opacity:0;pointer-events:none!important}
-#loading .rad{font-size:90px;color:var(--amber);animation:spin 6s linear infinite,flicker 4s infinite;
-  filter:drop-shadow(0 0 25px rgba(255,182,66,.5))}
+#loading .rad{font-size:90px;color:var(--amber);animation:spin 6s linear infinite,flicker 4s infinite;filter:drop-shadow(0 0 25px rgba(255,182,66,.5))}
 @keyframes spin{to{transform:rotate(360deg)}}
-#loading h1,.logo{font-weight:700;letter-spacing:.35em;font-size:clamp(26px,6vw,44px);color:var(--amber);
-  text-transform:uppercase;margin-top:24px;animation:flicker 3s infinite;text-shadow:0 0 20px rgba(255,182,66,.6)}
+#loading h1,.logo{font-weight:700;letter-spacing:.35em;font-size:clamp(26px,6vw,44px);color:var(--amber);text-transform:uppercase;margin-top:24px;animation:flicker 3s infinite;text-shadow:0 0 20px rgba(255,182,66,.6)}
 #loading .sub{font-family:'Share Tech Mono';color:#6b6152;font-size:13px;letter-spacing:.2em;margin-top:8px}
 .gauge{width:min(320px,80vw);height:10px;border:1px solid var(--amber-dim);margin-top:36px;padding:2px;box-shadow:inset 0 0 10px rgba(0,0,0,.8)}
 .gauge i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--amber));box-shadow:0 0 12px rgba(255,182,66,.7);transition:width .3s}
 #loadTxt{font-family:'Share Tech Mono';font-size:12px;color:var(--amber-dim);margin-top:14px;letter-spacing:.15em}
-.panel{background:linear-gradient(160deg,#1a150f,#100d09);border:1px solid #3a2e1e;
-  box-shadow:0 0 0 1px rgba(0,0,0,.8),0 20px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,182,66,.08);
-  padding:36px 32px;width:min(420px,92vw);position:relative;
-  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
-.panel::before{content:'';position:absolute;inset:6px;border:1px dashed rgba(255,182,66,.12);pointer-events:none;
-  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.panel{background:linear-gradient(160deg,#1a150f,#100d09);border:1px solid #3a2e1e;box-shadow:0 0 0 1px rgba(0,0,0,.8),0 20px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,182,66,.08);padding:36px 32px;width:min(440px,92vw);position:relative;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
+.panel::before{content:'';position:absolute;inset:6px;border:1px dashed rgba(255,182,66,.12);pointer-events:none;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
 .tag{font-family:'Share Tech Mono';font-size:11px;color:#5c5142;letter-spacing:.25em;margin-bottom:6px}
 label{display:block;font-size:12px;letter-spacing:.2em;color:#8a7d63;text-transform:uppercase;margin:18px 0 8px}
-input[type=text]{width:100%;background:#0b0906;border:1px solid #3a2e1e;color:var(--amber);
-  font-family:'Share Tech Mono';font-size:17px;padding:13px 14px;outline:none;letter-spacing:.08em;
-  box-shadow:inset 0 2px 12px rgba(0,0,0,.9)}
+input[type=text]{width:100%;background:#0b0906;border:1px solid #3a2e1e;color:var(--amber);font-family:'Share Tech Mono';font-size:17px;padding:13px 14px;outline:none;letter-spacing:.08em;box-shadow:inset 0 2px 12px rgba(0,0,0,.9)}
 input[type=text]:focus{border-color:var(--amber-dim);box-shadow:inset 0 2px 12px rgba(0,0,0,.9),0 0 14px rgba(255,182,66,.15)}
-.btn{display:block;width:100%;margin-top:22px;padding:15px;background:linear-gradient(180deg,#2a2013,#1a130a);
-  border:1px solid var(--amber-dim);color:var(--amber);font-family:'Oswald';font-size:16px;font-weight:500;
-  letter-spacing:.3em;text-transform:uppercase;cursor:pointer;position:relative;transition:.25s;
-  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+.btn{display:block;width:100%;margin-top:22px;padding:15px;background:linear-gradient(180deg,#2a2013,#1a130a);border:1px solid var(--amber-dim);color:var(--amber);font-family:'Oswald';font-size:16px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;cursor:pointer;transition:.25s;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
 .btn:hover{background:linear-gradient(180deg,#3d2e18,#241a0c);box-shadow:0 0 24px rgba(255,182,66,.25);color:#ffd58a}
 .btn:active{transform:translateY(2px)}
-.btn.ghost{border-color:#3a2e1e;color:#8a7d63;font-size:13px;padding:11px}
-.btn:disabled{opacity:.4;cursor:not-allowed}
 #chat{display:flex;flex-direction:column;justify-content:flex-start;padding:0}
-.topbar{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:12px 16px;
-  background:linear-gradient(180deg,#1c160f,#120e09);border-bottom:1px solid #3a2e1e;box-shadow:0 6px 24px rgba(0,0,0,.6)}
-.dot{width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:pulse 1.5s infinite}
+.topbar{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(180deg,#1c160f,#120e09);border-bottom:1px solid #3a2e1e;box-shadow:0 6px 24px rgba(0,0,0,.6)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:pulse 1.5s infinite;flex-shrink:0}
 .dot.on{background:var(--green);box-shadow:0 0 10px var(--green)}
-.topbar .title{font-weight:700;letter-spacing:.2em;color:var(--amber);font-size:15px;text-transform:uppercase;animation:flicker 6s infinite}
-.topbar .freq{font-family:'Share Tech Mono';font-size:11px;color:#5c5142;letter-spacing:.1em}
+.topbar .title{font-weight:700;letter-spacing:.2em;color:var(--amber);font-size:14px;text-transform:uppercase;animation:flicker 6s infinite}
+.topbar .freq{font-family:'Share Tech Mono';font-size:10px;color:#5c5142;letter-spacing:.1em}
+.topbar .icestatus{font-family:'Share Tech Mono';font-size:9px;padding:2px 8px;border:1px solid #3a2e1e;letter-spacing:.1em}
+.topbar .icestatus.checking{color:#ffb642;border-color:#8a6423}
+.topbar .icestatus.connected{color:#7dff8a;border-color:#3a7a3a}
+.topbar .icestatus.failed{color:#ff4b3a;border-color:#7a2a2a}
+.topbar .icestatus.disconnected{color:#ff8c42;border-color:#7a5a2a}
 .topbar .spacer{flex:1}
-.icon-btn{background:none;border:1px solid #3a2e1e;color:#8a7d63;width:38px;height:38px;cursor:pointer;
-  font-size:16px;transition:.2s;display:grid;place-items:center}
+.icon-btn{background:none;border:1px solid #3a2e1e;color:#8a7d63;width:36px;height:36px;cursor:pointer;font-size:15px;transition:.2s;display:grid;place-items:center;flex-shrink:0}
 .icon-btn:hover{border-color:var(--amber-dim);color:var(--amber);box-shadow:0 0 12px rgba(255,182,66,.2)}
 #msgs{flex:1;overflow-y:auto;padding:18px 14px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
 #msgs::-webkit-scrollbar{width:5px}#msgs::-webkit-scrollbar-thumb{background:var(--rust)}
-.msg{max-width:78%;padding:10px 14px;position:relative;animation:msgin .3s ease;
-  background:linear-gradient(160deg,#1c160f,#13100a);border:1px solid #33291a;
-  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.msg{max-width:78%;padding:10px 14px;position:relative;animation:msgin .3s ease;background:linear-gradient(160deg,#1c160f,#13100a);border:1px solid #33291a;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
 @keyframes msgin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .msg.own{align-self:flex-end;background:linear-gradient(160deg,#2b1f0e,#1d1508);border-color:#4d3a1a}
 .msg .who{font-family:'Share Tech Mono';font-size:10px;letter-spacing:.15em;color:var(--amber-dim);margin-bottom:4px;text-transform:uppercase}
@@ -84,37 +66,30 @@ input[type=text]:focus{border-color:var(--amber-dim);box-shadow:inset 0 2px 12px
 .msg .time{font-family:'Share Tech Mono';font-size:9px;color:#4d4436;margin-top:5px;text-align:right}
 .msg img,.msg video{max-width:100%;max-height:280px;display:block;margin-top:4px;border:1px solid #33291a;cursor:pointer}
 .msg audio{width:230px;max-width:100%;margin-top:4px;filter:sepia(1) hue-rotate(-15deg) saturate(2.2) brightness(.85)}
-.sys{align-self:center;font-family:'Share Tech Mono';font-size:11px;color:#5c5142;letter-spacing:.15em;
-  padding:4px 14px;border:1px dashed #33291a;animation:msgin .3s ease;max-width:90%;text-align:center}
-.inputbar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:10px 12px;
-  background:linear-gradient(0deg,#1c160f,#120e09);border-top:1px solid #3a2e1e}
+.sys{align-self:center;font-family:'Share Tech Mono';font-size:11px;color:#5c5142;letter-spacing:.15em;padding:4px 14px;border:1px dashed #33291a;animation:msgin .3s ease;max-width:90%;text-align:center}
+.inputbar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:10px 12px;background:linear-gradient(0deg,#1c160f,#120e09);border-top:1px solid #3a2e1e}
 .inputbar input{flex:1;font-size:15px;padding:12px 14px}
-.act{width:44px;height:44px;flex-shrink:0;background:linear-gradient(180deg,#2a2013,#1a130a);
-  border:1px solid #3a2e1e;color:var(--amber);font-size:18px;cursor:pointer;transition:.2s;display:grid;place-items:center;
-  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.act{width:44px;height:44px;flex-shrink:0;background:linear-gradient(180deg,#2a2013,#1a130a);border:1px solid #3a2e1e;color:var(--amber);font-size:18px;cursor:pointer;transition:.2s;display:grid;place-items:center;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
 .act:hover{border-color:var(--amber-dim);box-shadow:0 0 14px rgba(255,182,66,.25)}
 .act.rec{background:var(--red);border-color:var(--red);color:#fff;animation:pulse 1s infinite}
-#recBadge{position:fixed;bottom:76px;left:50%;transform:translateX(-50%);z-index:50;
-  background:rgba(20,10,8,.95);border:1px solid var(--red);padding:8px 22px;
-  font-family:'Share Tech Mono';color:var(--red);font-size:14px;letter-spacing:.2em;display:none}
-#toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:9500;
-  background:rgba(15,12,8,.95);border:1px solid var(--amber-dim);color:var(--amber);
-  font-family:'Share Tech Mono';font-size:12px;letter-spacing:.15em;padding:10px 24px;
-  opacity:0;transition:.4s;pointer-events:none;white-space:nowrap}
+#recBadge{position:fixed;bottom:76px;left:50%;transform:translateX(-50%);z-index:50;background:rgba(20,10,8,.95);border:1px solid var(--red);padding:8px 22px;font-family:'Share Tech Mono';color:var(--red);font-size:14px;letter-spacing:.2em;display:none}
+#toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:9500;background:rgba(15,12,8,.95);border:1px solid var(--amber-dim);color:var(--amber);font-family:'Share Tech Mono';font-size:12px;letter-spacing:.15em;padding:10px 24px;opacity:0;transition:.4s;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1}
 #viewer{position:fixed;inset:0;z-index:9600;background:rgba(0,0,0,.94);display:none;place-items:center;cursor:zoom-out}
 #viewer img{max-width:94vw;max-height:94vh;border:1px solid var(--amber-dim)}
-#debugLog{position:fixed;bottom:4px;left:4px;z-index:9700;max-width:96vw;max-height:120px;overflow-y:auto;
-  background:rgba(0,0,0,.8);border:1px solid #333;padding:6px 8px;font-family:'Share Tech Mono';
-  font-size:10px;color:#888;pointer-events:auto;display:none;white-space:pre-wrap;word-break:break-all}
+#dbg{position:fixed;bottom:4px;left:4px;z-index:9700;width:min(400px,92vw);max-height:160px;overflow-y:auto;background:rgba(0,0,0,.85);border:1px solid #333;padding:6px 8px;font-family:'Share Tech Mono';font-size:10px;color:#888;display:none;white-space:pre-wrap;word-break:break-all}
+#diagModal{position:fixed;inset:0;z-index:9800;background:rgba(0,0,0,.9);display:none;place-items:center;padding:20px}
+#diagModal .panel{width:min(460px,94vw);max-height:80vh;overflow-y:auto}
+#diagModal pre{font-family:'Share Tech Mono';font-size:11px;color:#c9b896;line-height:1.6;white-space:pre-wrap;margin-top:12px}
 @media(max-width:480px){.msg{max-width:88%}.msg audio{width:190px}}
 </style>
 </head>
 <body>
 <div id="noise"></div>
 <div id="toast"></div>
-<div id="debugLog"></div>
+<div id="dbg"></div>
 <div id="viewer" onclick="this.style.display='none'"><img id="viewerImg"></div>
+<div id="diagModal"><div class="panel"><div class="tag">// ДИАГНОСТИКА СЕТИ //</div><pre id="diagResult">Сканирование...</pre><button class="btn" onclick="document.getElementById('diagModal').style.display='none'">ЗАКРЫТЬ</button></div></div>
 
 <div class="screen" id="loading">
   <div class="rad">☢</div>
@@ -131,19 +106,20 @@ input[type=text]:focus{border-color:var(--amber-dim);box-shadow:inset 0 2px 12px
     <label>Позывной (ваше имя)</label>
     <input type="text" id="nameInput" maxlength="20" placeholder="Артём" autocomplete="off">
     <button class="btn" id="btnCreate">⚡ Создать комнату</button>
-    <button class="btn" id="btnJoin" style="display:none">📡 Подключиться к частоте</button>
+    <button class="btn" id="btnJoin" style="display:none">📡 Подключиться</button>
   </div>
 </div>
 
 <div class="screen hidden" id="chat">
   <div class="topbar">
     <div class="dot" id="statusDot"></div>
-    <div>
+    <div style="min-width:0">
       <div class="title">Metro Link</div>
       <div class="freq" id="freqTxt">ЧАСТОТА: ---</div>
     </div>
+    <div class="icestatus" id="iceStatus" style="display:none">---</div>
     <div class="spacer"></div>
-    <button class="icon-btn" id="btnDbg" title="Отладка">🐛</button>
+    <button class="icon-btn" id="btnDiag" title="Диагностика сети">🔍</button>
     <button class="icon-btn" id="btnInvite" title="Пригласить друга">🔗</button>
     <button class="icon-btn" id="btnLeave" title="Покинуть частоту">✕</button>
   </div>
@@ -152,7 +128,7 @@ input[type=text]:focus{border-color:var(--amber-dim);box-shadow:inset 0 2px 12px
   <div class="inputbar">
     <button class="act" id="btnPhoto" title="Фото">📷</button>
     <button class="act" id="btnVideo" title="Видео">🎬</button>
-    <button class="act" id="btnMic" title="Голосовое (до 1 мин)">🎙</button>
+    <button class="act" id="btnMic" title="Голосовое">🎙</button>
     <input type="text" id="msgInput" placeholder="Сообщение..." autocomplete="off" maxlength="2000">
     <button class="act" id="btnSend" title="Отправить">➤</button>
   </div>
@@ -164,36 +140,25 @@ input[type=text]:focus{border-color:var(--amber-dim);box-shadow:inset 0 2px 12px
 <script>
 'use strict';
 const $=s=>document.querySelector(s);
-const STORE='mx_state_v2';
+const STORE='mx_v3';
 let peer=null,conns=[],hostConn=null,isHost=false,myName='',roomId='',myId='';
 let mediaRec=null,recChunks=[],recTimer=null,recSec=0;
-let reconnectAttempts=0, maxReconnect=10, reconnTimer=null, peerReady=false;
+let reconnAttempts=0,maxReconn=8,reconnTimer=null;
 
-/* ===== DEBUG LOG ===== */
-const dbgEl=$('#debugLog');
-let dbgVisible=false;
-$('#btnDbg').onclick=()=>{dbgVisible=!dbgVisible;dbgEl.style.display=dbgVisible?'block':'none';};
-function dbg(t){console.log('[MX]',t);dbgEl.textContent+=t+'\n';dbgEl.scrollTop=dbgEl.scrollHeight;}
+/* ===== ОТЛАДКА ===== */
+const dbgEl=$('#dbg');
+let dbgOn=false;
+function dbg(t){console.log('[MX]',t);if(dbgOn){dbgEl.textContent+=t+'\n';dbgEl.scrollTop=dbgEl.scrollHeight;}}
 
 /* ===== ЗВУКИ ===== */
 let AC=null;
 const audio=()=>{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC;};
-function tone(f,dur,type='square',vol=.06,when=0){
-  try{const a=audio(),o=a.createOscillator(),g=a.createGain();
-  o.type=type;o.frequency.value=f;g.gain.setValueAtTime(vol,a.currentTime+when);
-  g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+when+dur);
-  o.connect(g);g.connect(a.destination);o.start(a.currentTime+when);o.stop(a.currentTime+when+dur+.05);}catch(e){}
-}
-function staticBurst(dur=.25,vol=.05){
-  try{const a=audio(),len=a.sampleRate*dur,buf=a.createBuffer(1,len,a.sampleRate),d=buf.getChannelData(0);
-  for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*(1-i/len);
-  const s=a.createBufferSource(),g=a.createGain();g.gain.value=vol;
-  s.buffer=buf;s.connect(g);g.connect(a.destination);s.start();}catch(e){}
-}
+function tone(f,dur,tp='square',vol=.06,when=0){try{const a=audio(),o=a.createOscillator(),g=a.createGain();o.type=tp;o.frequency.value=f;g.gain.setValueAtTime(vol,a.currentTime+when);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+when+dur);o.connect(g);g.connect(a.destination);o.start(a.currentTime+when);o.stop(a.currentTime+when+dur+.05);}catch(e){}}
+function burst(dur=.25,vol=.05){try{const a=audio(),len=a.sampleRate*dur,buf=a.createBuffer(1,len,a.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*(1-i/len);const s=a.createBufferSource(),g=a.createGain();g.gain.value=vol;s.buffer=buf;s.connect(g);g.connect(a.destination);s.start();}catch(e){}}
 const sClick=()=>tone(900,.05,'square',.04);
 const sSend=()=>{tone(600,.07,'square',.05);tone(900,.07,'square',.05,.07);};
-const sRecv=()=>{staticBurst(.12,.03);tone(500,.09,'sine',.07,.1);tone(700,.12,'sine',.07,.18);};
-const sJoin=()=>{staticBurst(.3,.05);tone(400,.1,'sawtooth',.04,.25);tone(600,.1,'sawtooth',.04,.35);tone(800,.15,'sawtooth',.04,.45);};
+const sRecv=()=>{burst(.12,.03);tone(500,.09,'sine',.07,.1);tone(700,.12,'sine',.07,.18);};
+const sJoin=()=>{burst(.3,.05);tone(400,.1,'sawtooth',.04,.25);tone(600,.1,'sawtooth',.04,.35);tone(800,.15,'sawtooth',.04,.45);};
 const sGeiger=()=>{for(let i=0;i<5;i++)tone(2000+Math.random()*800,.015,'square',.03,i*.09+Math.random()*.04);};
 
 /* ===== УТИЛИТЫ ===== */
@@ -204,25 +169,116 @@ const now=()=>{const d=new Date();return d.getHours()+':'+String(d.getMinutes())
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));$(id).classList.remove('hidden');}
 
-/* ===== PeerJS конфиг ===== */
-const PEER_CONFIG={
-  config:{
-    iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-      {urls:'stun:stun2.l.google.com:19302'},
-      {urls:'stun:stun3.l.google.com:19302'},
-      {urls:'stun:stun4.l.google.com:19302'},
-      {urls:'stun:stun.ekiga.net'},
-      {urls:'stun:stun.ideasip.com'},
-      {urls:'stun:stun.schlund.de'},
-      {urls:'stun:stun.stunprotocol.org:3478'},
-      {urls:'stun:stun.voiparound.com'},
-      {urls:'stun:stun.voipbuster.com'}
-    ]
-  },
-  debug: 0
+/* ===== ICE КОНФИГУРАЦИЯ ===== */
+const ICE_SERVERS=[
+  {urls:'stun:stun.l.google.com:19302'},
+  {urls:'stun:stun1.l.google.com:19302'},
+  {urls:'stun:stun2.l.google.com:19302'},
+  {urls:'stun:stun3.l.google.com:19302'},
+  {urls:'stun:stun4.l.google.com:19302'},
+  {urls:'stun:stun.ekiga.net'},
+  {urls:'stun:stun.stunprotocol.org:3478'},
+  /* Open Relay Project — бесплатный TURN */
+  {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+  {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
+  {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'},
+  {urls:'turn:openrelay.metered.ca:80?transport=tcp',username:'openrelayproject',credential:'openrelayproject'},
+  /* Fallback TURN */
+  {urls:'turn:turn.anyfirewall.com:443?transport=tcp',username:'webrtc',credential:'webrtc'},
+];
+
+const PEER_OPTS={
+  host:'0.peerjs.com',port:443,path:'/',secure:true,
+  config:{iceServers:ICE_SERVERS},
+  debug:0
 };
+
+/* ===== ICE МОНИТОРИНГ ===== */
+function setICEStatus(state){
+  const el=$('#iceStatus');el.style.display='inline-block';
+  el.className='icestatus '+state;
+  const map={new:'НОВ',checking:'⏳ СОЕДИНЕНИЕ...',connected:'✓ СВЯЗЬ',completed:'✓ СВЯЗЬ',
+    disconnected:'⚠ РАЗРЫВ',failed:'✗ ОШИБКА',closed:'ЗАКРЫТО'};
+  el.textContent=map[state]||state;
+}
+
+function monitorICE(conn,label){
+  /* PeerJS выставляет peerConnection после создания оффера */
+  const tryMonitor=()=>{
+    const pc=conn.peerConnection||conn._peerConnection;
+    if(!pc)return false;
+    pc.oniceconnectionstatechange=()=>{
+      const s=pc.iceConnectionState;
+      dbg(label+' ICE: '+s);
+      setICEStatus(s);
+      if(s==='failed'){
+        dbg(label+': ICE FAILED — restart');
+        try{pc.restartIce();}catch(e){dbg('restartIce: '+e);}
+      }
+      if(s==='connected'||s==='completed'){
+        reconnAttempts=0;
+        setDot(true);
+        if(!isHost&&conn===hostConn) sysMsg('СВЯЗЬ УСТАНОВЛЕНА');
+      }
+      if(s==='disconnected'){
+        setDot(false);
+        sysMsg('⚠ СИГНАЛ ОСЛАБЕВает...');
+      }
+    };
+    pc.onsignalingstatechange=()=>dbg(label+' SIG: '+pc.signalingState);
+    return true;
+  };
+  if(!tryMonitor()){
+    /* peerConnection ещё не создан — попробуем позже */
+    const iv=setInterval(()=>{if(tryMonitor())clearInterval(iv);},200);
+    setTimeout(()=>clearInterval(iv),5000);
+  }
+}
+
+/* ===== ДИАГНОСТИКА ===== */
+async function runDiag(){
+  const pre=$('#diagResult');
+  pre.textContent='⏳ Сканирование ICE-серверов...\n';
+  $('#diagModal').style.display='grid';
+  let report='=== ДИАГНОСТИКА СЕТИ ===\n\n';
+
+  /* Проверяем STUN/TURN кандидаты */
+  try{
+    const pc=new RTCPeerConnection({iceServers:ICE_SERVERS});
+    pc.createDataChannel('test');
+    const offer=await pc.createOffer();
+    await pc.setLocalDescription(offer);
+
+    const candidates=await new Promise(res=>{
+      const cands=[];
+      pc.onicecandidate=e=>{
+        if(!e.candidate){res(cands);return;}
+        cands.push(e.candidate.candidate);
+      };
+      setTimeout(()=>res(cands),8000);
+    });
+    pc.close();
+
+    const host=candidates.filter(c=>c.includes('typ host'));
+    const srflx=candidates.filter(c=>c.includes('typ srflx'));
+    const relay=candidates.filter(c=>c.includes('typ relay'));
+
+    report+='HOST кандидатов: '+host.length+'\n';
+    report+='STUN кандидатов (srflx): '+srflx.length+(srflx.length>0?' ✓':' ✗')+'\n';
+    report+='TURN кандидатов (relay): '+relay.length+(relay.length>0?' ✓':' ✗')+'\n\n';
+
+    if(relay.length>0) report+='✓ TURN-серверы работают — связь должна установиться\n';
+    else if(srflx.length>0) report+='⚠ STUN работает, TURN — НЕТ\n  Связь возможна только если один из пользователей\n  не за симметричным NAT\n';
+    else report+='✗ Ни STUN, ни TURN не работают\n  WebRTC заблокирован вашим провайдером/файрволом\n';
+
+    report+='\n--- Кандидаты ---\n';
+    candidates.forEach(c=>report+=c.substring(0,120)+'\n');
+
+  }catch(e){report+='✗ Ошибка: '+e.message+'\n';}
+
+  report+='\n\nPeerJS: '+roomId+'\nisHost: '+isHost+'\nmyId: '+myId+'\nConns: '+conns.length+'\nhostConn: '+(hostConn?'open':'null');
+  pre.textContent=report;
+}
 
 /* ===== ЗАГРУЗКА ===== */
 const phrases=['ИНИЦИАЛИЗАЦИЯ...','ПРОВЕРКА ФИЛЬТРОВ...','ЗАРЯДКА АККУМУЛЯТОРА...','НАСТРОЙКА АНТЕННЫ...','ПОИСК ЧАСТОТЫ...','СВЯЗЬ УСТАНОВЛЕНА'];
@@ -238,122 +294,81 @@ document.addEventListener('pointerdown',()=>audio(),{once:true});
 function boot(){
   const st=load();
   const urlRoom=new URLSearchParams(location.search).get('room');
-  dbg('boot: st='+JSON.stringify(st)+' urlRoom='+urlRoom);
+  dbg('boot st='+JSON.stringify(st)+' url='+urlRoom);
   if(st&&st.myName){myName=st.myName;$('#nameInput').value=myName;}
   if(urlRoom&&(!st||st.roomId!==urlRoom||st.isHost)){
     roomId=urlRoom;$('#btnCreate').style.display='none';$('#btnJoin').style.display='block';show('#menu');
-    dbg('Mode: JOIN room='+roomId);
   }else if(st&&st.roomId){
-    myName=st.myName;roomId=st.roomId;isHost=st.isHost;myId=st.myId;
-    dbg('Mode: RESTORE isHost='+isHost);
-    enterChat(true);
+    myName=st.myName;roomId=st.roomId;isHost=st.isHost;myId=st.myId;enterChat(true);
   }else if(urlRoom){
     roomId=urlRoom;$('#btnCreate').style.display='none';$('#btnJoin').style.display='block';show('#menu');
-  }else{show('#menu');dbg('Mode: MENU');}
+  }else show('#menu');
 }
 
 /* ===== СОЗДАНИЕ / ВХОД ===== */
 $('#btnCreate').onclick=()=>{
   const n=$('#nameInput').value.trim();if(!n)return toast('ВВЕДИТЕ ПОЗЫВНОЙ');
   sClick();myName=n;isHost=true;
-  roomId='ml'+Math.random().toString(36).slice(2,8);
-  myId=roomId;save();enterChat(false);
-  dbg('CREATE room='+roomId);
+  roomId='ml'+Math.random().toString(36).slice(2,8);myId=roomId;save();enterChat(false);
 };
 $('#btnJoin').onclick=()=>{
   const n=$('#nameInput').value.trim();if(!n)return toast('ВВЕДИТЕ ПОЗЫВНОЙ');
   sClick();myName=n;isHost=false;
-  myId='g'+Math.random().toString(36).slice(2,10);
-  save();enterChat(false);
-  dbg('JOIN room='+roomId+' myId='+myId);
+  myId='g'+Math.random().toString(36).slice(2,10);save();enterChat(false);
 };
 
 function enterChat(restored){
   show('#chat');sJoin();
-  const code=roomId.replace('ml','').toUpperCase();
-  $('#freqTxt').textContent='ЧАСТОТА: '+code;
+  $('#freqTxt').textContent='ЧАСТОТА: '+roomId.replace('ml','').toUpperCase();
   if(restored)sysMsg('СВЯЗЬ ВОССТАНОВЛЕНА');
-  else sysMsg(isHost?'ЧАСТОТА СОЗДАНА: '+code:'ПОДКЛЮЧЕНИЕ К ЧАСТОТЕ...');
+  else sysMsg(isHost?'ЧАСТОТА СОЗДАНА. ОЖИДАНИЕ СИГНАЛА...':'ПОДКЛЮЧЕНИЕ К ЧАСТОТЕ...');
   startPeer();
 }
 
 /* ===== PEERJS ===== */
-function destroyPeer(){
-  if(peer){
-    try{peer.destroy();}catch(e){}
-    peer=null;
-  }
-}
+function destroyPeer(){if(peer){try{peer.destroy();}catch(e){}peer=null;}}
 
 function startPeer(){
-  destroyPeer();peerReady=false;reconnectAttempts=0;
-  dbg('startPeer: myId='+myId+' isHost='+isHost+' room='+roomId);
-
-  peer=new Peer(myId,PEER_CONFIG);
+  destroyPeer();reconnAttempts=0;
+  dbg('startPeer id='+myId+' host='+isHost+' room='+roomId);
+  peer=new Peer(myId,PEER_OPTS);
 
   peer.on('open',id=>{
-    dbg('✓ PEER OPEN id='+id);
-    peerReady=true;reconnectAttempts=0;
-    if(isHost){setDot(true);sysMsg('АНТЕННА ГОТОВА. ОЖИДАНИЕ СИГНАЛА...');}
-    else{connectToHost();}
+    dbg('✓ PEER OPEN id='+id);reconnAttempts=0;
+    if(isHost){setDot(true);setICEStatus('connected');sysMsg('АНТЕННА ГОТОВА. ПРИГЛАСИТЕ ДРУГА 🔗');}
+    else connectToHost();
   });
 
   peer.on('connection',c=>{
-    dbg('← ВХОДЯЩЕЕ СОЕДИНЕНИЕ от='+c.peer);
+    dbg('← ВХОДЯЩЕЕ от='+c.peer);
     if(isHost)setupHostConn(c);
   });
 
   peer.on('disconnected',()=>{
-    dbg('⚠ PEER DISCONNECTED');
-    setDot(false);
-    // Auto-reconnect
-    if(peer&&!peer.destroyed){
-      dbg('Попытка reconnect...');
-      try{peer.reconnect();}catch(e){dbg('reconnect err: '+e);}
-    }
+    dbg('⚠ PEER DISCONNECTED');setDot(false);setICEStatus('disconnected');
+    if(peer&&!peer.destroyed){setTimeout(()=>{try{peer.reconnect();}catch(e){}},2000);}
   });
 
-  peer.on('close',()=>{
-    dbg('⚠ PEER CLOSED');
-    setDot(false);
-  });
+  peer.on('close',()=>{dbg('PEER CLOSED');setDot(false);});
 
   peer.on('error',err=>{
-    dbg('✗ PEER ERROR: type='+err.type+' msg='+(err.message||''));
-    console.error('[MX] PeerError:',err);
-
+    dbg('✗ ERROR: '+err.type+' '+(err.message||''));
+    console.error('[MX]',err);
     if(err.type==='unavailable-id'){
-      dbg('ID занят, пробуем новый...');
-      if(isHost){roomId='ml'+Math.random().toString(36).slice(2,8);myId=roomId;roomId=myId;save();}
-      else{myId='g'+Math.random().toString(36).slice(2,10);save();}
-      setTimeout(startPeer,2000);
-      sysMsg('ЧАСТОТА ЗАНЯТА. ПОИСК НОВОЙ...');
-    }
-    else if(err.type==='peer-unavailable'){
-      dbg('Хост не найден, retry '+(reconnectAttempts+1)+'/'+maxReconnect);
-      if(reconnectAttempts<maxReconnect){
-        reconnectAttempts++;
-        sysMsg('ХОЗЯИН НЕ НАЙДЕН. ПОПЫТКА '+reconnectAttempts+'/'+maxReconnect+'...');
-        const delay=Math.min(2000*Math.pow(1.5,reconnectAttempts),15000);
-        clearTimeout(reconnTimer);
-        reconnTimer=setTimeout(connectToHost,delay);
-      }else{
-        sysMsg('⚠ НЕ УДАЛОСЬ ПОДКЛЮЧИТЬСЯ. ОБНОВИТЕ СТРАНИЦУ.');
-      }
-    }
-    else if(err.type==='network'){
-      sysMsg('⚠ СЕТЬ НЕДОСТУПНА');
-      clearTimeout(reconnTimer);reconnTimer=setTimeout(()=>{if(peer)peer.reconnect();},5000);
-    }
-    else if(err.type==='server-error'){
+      if(isHost){roomId='ml'+Math.random().toString(36).slice(2,8);myId=roomId;}
+      else myId='g'+Math.random().toString(36).slice(2,10);
+      save();setTimeout(startPeer,2000);sysMsg('СМЕНА ЧАСТОТЫ...');
+    }else if(err.type==='peer-unavailable'){
+      if(reconnAttempts<maxReconn){
+        reconnAttempts++;
+        sysMsg('ХОЗЯИН НЕ НАЙДЕН. ПОПЫТКА '+reconnAttempts+'/'+maxReconn);
+        const d=Math.min(1500*Math.pow(1.4,reconnAttempts),12000);
+        clearTimeout(reconnTimer);reconnTimer=setTimeout(connectToHost,d);
+      }else sysMsg('⚠ НЕ УДАЛОСЬ ПОДКЛЮЧИТЬСЯ. НАЖМИТЕ 🔍 ДЛЯ ДИАГНОСТИКИ');
+    }else if(err.type==='network'||err.type==='server-error'||err.type==='socket-error'){
       sysMsg('⚠ СЕРВЕР СВЯЗИ НЕДОСТУПЕН. ПЕРЕЗАПУСК...');
       clearTimeout(reconnTimer);reconnTimer=setTimeout(startPeer,4000);
-    }
-    else if(err.type==='socket-error'){
-      dbg('Socket error, restarting...');
-      clearTimeout(reconnTimer);reconnTimer=setTimeout(startPeer,3000);
-    }
-    else{
+    }else{
       sysMsg('⚠ ОШИБКА: '+err.type);
       clearTimeout(reconnTimer);reconnTimer=setTimeout(startPeer,5000);
     }
@@ -361,117 +376,82 @@ function startPeer(){
 }
 
 function connectToHost(){
-  if(!peer||peer.destroyed){dbg('connectToHost: peer not ready');return;}
-  dbg('→ connectToHost room='+roomId);
+  if(!peer||peer.destroyed){dbg('connectToHost: no peer');return;}
+  dbg('→ CONNECT to '+roomId);setICEStatus('checking');
 
-  try{
-    const c=peer.connect(roomId,{
-      reliable:true,
-      metadata:{name:myName}
-    });
+  let c;try{c=peer.connect(roomId,{metadata:{name:myName}});}catch(e){dbg('connect err: '+e);return;}
 
-    let connected=false;
+  let opened=false;
+  monitorICE(c,'GUEST');
 
-    c.on('open',()=>{
-      connected=true;reconnectAttempts=0;
-      hostConn=c;setDot(true);
-      dbg('✓ СОЕДИНЕНИЕ ОТКРЫТО с '+c.peer);
-      sysMsg('СВЯЗЬ УСТАНОВЛЕНА');sGeiger();
-      c.send({t:'hello',name:myName});
-    });
+  c.on('open',()=>{
+    opened=true;hostConn=c;reconnAttempts=0;setDot(true);
+    dbg('✓ CONN OPEN');sysMsg('СВЯЗЬ УСТАНОВЛЕНА');sGeiger();
+    c.send({t:'hello',name:myName});
+  });
 
-    c.on('data',d=>handleData(d));
+  c.on('data',d=>handleData(d));
 
-    c.on('close',()=>{
-      dbg('⚠ СОЕДИНЕНИЕ ЗАКРЫТО');
-      hostConn=null;setDot(false);
-      if(peer&&!peer.destroyed){
-        sysMsg('СИГНАЛ ПОТЕРЯН. ПЕРЕПОДКЛЮЧЕНИЕ...');
-        reconnectAttempts=0;
-        clearTimeout(reconnTimer);
-        reconnTimer=setTimeout(connectToHost,2500);
+  c.on('close',()=>{
+    dbg('CONN CLOSED');hostConn=null;setDot(false);setICEStatus('disconnected');
+    if(peer&&!peer.destroyed){
+      sysMsg('СИГНАЛ ПОТЕРЯН. ПЕРЕПОДКЛЮЧЕНИЕ...');
+      reconnAttempts=0;clearTimeout(reconnTimer);reconnTimer=setTimeout(connectToHost,3000);
+    }
+  });
+
+  c.on('error',e=>{dbg('CONN ERROR: '+e);if(!opened){clearTimeout(reconnTimer);reconnTimer=setTimeout(connectToHost,4000);}});
+
+  /* Таймаут 15 сек */
+  setTimeout(()=>{
+    if(!opened){
+      dbg('✗ CONN TIMEOUT 15s');
+      try{c.close();}catch(e){}
+      if(reconnAttempts<maxReconn){
+        reconnAttempts++;
+        sysMsg('ТАЙМАУТ. ПОПЫТКА '+reconnAttempts+'/'+maxReconn+'...');
+        const d=Math.min(2000*Math.pow(1.3,reconnAttempts),10000);
+        clearTimeout(reconnTimer);reconnTimer=setTimeout(connectToHost,d);
+      }else{
+        sysMsg('⚠ НЕ УДАЛОСЬ. НАЖМИТЕ 🔍 ДЛЯ ДИАГНОСТИКИ СЕТИ');
+        setICEStatus('failed');
       }
-    });
-
-    c.on('error',e=>{
-      dbg('✗ CONN ERROR: '+e);
-      if(!connected){
-        clearTimeout(reconnTimer);
-        reconnTimer=setTimeout(connectToHost,4000);
-      }
-    });
-
-    // Таймаут: если за 10 сек не открылось
-    setTimeout(()=>{
-      if(!connected){
-        dbg('✗ CONN TIMEOUT');
-        try{c.close();}catch(e){}
-        if(reconnectAttempts<maxReconnect){
-          reconnectAttempts++;
-          const delay=Math.min(2000*Math.pow(1.5,reconnectAttempts),12000);
-          clearTimeout(reconnTimer);
-          reconnTimer=setTimeout(connectToHost,delay);
-        }
-      }
-    },10000);
-
-  }catch(e){
-    dbg('connectToHost exception: '+e);
-    clearTimeout(reconnTimer);reconnTimer=setTimeout(connectToHost,4000);
-  }
+    }
+  },15000);
 }
 
 function setupHostConn(c){
+  monitorICE(c,'HOST('+c.peer.slice(0,6)+')');
+
   c.on('open',()=>{
     conns.push(c);setDot(true);
-    dbg('✓ ГОСТЬ ПОДКЛЮЧЕН: '+c.peer+' name='+(c.metadata?c.metadata.name:'?'));
+    dbg('✓ ГОСТЬ ПОДКЛЮЧЕН: '+c.peer);
   });
 
   c.on('data',d=>{
     if(d.t==='hello'){
-      c._name=d.name;
-      dbg('👋 HELLO от '+d.name);
-      const txt='📡 '+d.name.toUpperCase()+' НА СВЯЗИ';
-      sysMsg(txt);sGeiger();
-      relay({t:'sys',txt},c);
-      return;
+      c._name=d.name;const txt='📡 '+d.name.toUpperCase()+' НА СВЯЗИ';
+      sysMsg(txt);sGeiger();relay({t:'sys',txt},c);return;
     }
-    handleData(d);
-    relay(d,c);
+    handleData(d);relay(d,c);
   });
 
   c.on('close',()=>{
-    dbg('⚠ ГОСТЬ ОТКЛЮЧИЛСЯ: '+(c._name||c.peer));
     conns=conns.filter(x=>x!==c);
-    if(c._name){
-      const txt='⚠ '+c._name.toUpperCase()+' ВНЕ ЗОНЫ';
-      sysMsg(txt);relay({t:'sys',txt},null);
-    }
-    if(conns.length===0)setDot(false);
+    if(c._name){const txt='⚠ '+c._name.toUpperCase()+' ВНЕ ЗОНЫ';sysMsg(txt);relay({t:'sys',txt},null);}
+    if(!conns.length)setDot(false);
+    dbg('ГОСТЬ OFF: '+(c._name||c.peer));
   });
 
-  c.on('error',e=>dbg('HOST CONN ERROR: '+e));
+  c.on('error',e=>dbg('HOST CONN ERR: '+e));
 }
 
-function relay(d,except){
-  conns.forEach(c=>{
-    if(c!==except&&c.open)try{c.send(d);}catch(e){dbg('relay err: '+e);}
-  });
-}
+function relay(d,except){conns.forEach(c=>{if(c!==except&&c.open)try{c.send(d);}catch(e){}});}
 
 function sendOut(d){
-  if(isHost){
-    relay(d,null);
-    dbg('RELAY to '+conns.filter(c=>c.open).length+' peers');
-    return true;
-  }else if(hostConn&&hostConn.open){
-    try{hostConn.send(d);}catch(e){dbg('sendOut err: '+e);return false;}
-    return true;
-  }else{
-    dbg('sendOut: NO CONNECTION');
-    toast('НЕТ СВЯЗИ');
-    return false;
-  }
+  if(isHost){relay(d,null);return true;}
+  if(hostConn&&hostConn.open){try{hostConn.send(d);}catch(e){return false;}return true;}
+  toast('НЕТ СВЯЗИ');return false;
 }
 
 function handleData(d){
@@ -484,19 +464,17 @@ function setDot(on){$('#statusDot').classList.toggle('on',on);}
 
 /* ===== СООБЩЕНИЯ ===== */
 function sysMsg(t){const e=document.createElement('div');e.className='sys';e.textContent=t;$('#msgs').appendChild(e);scrollDown();}
-
 function addMsg(m,own){
   const e=document.createElement('div');e.className='msg'+(own?' own':'');
-  let inner='<div class="who">'+esc(own?myName:m.name)+(own?' (вы)':'')+'</div>';
-  if(m.txt)inner+='<div class="txt">'+esc(m.txt)+'</div>';
-  if(m.media==='image')inner+='<img src="'+m.data+'" onclick="openImg(this.src)">';
-  if(m.media==='video')inner+='<video src="'+m.data+'" controls playsinline></video>';
-  if(m.media==='audio')inner+='<audio src="'+m.data+'" controls></audio>';
-  inner+='<div class="time">'+now()+'</div>';
-  e.innerHTML=inner;$('#msgs').appendChild(e);scrollDown();
+  let h='<div class="who">'+esc(own?myName:m.name)+(own?' (вы)':'')+'</div>';
+  if(m.txt)h+='<div class="txt">'+esc(m.txt)+'</div>';
+  if(m.media==='image')h+='<img src="'+m.data+'" onclick="openImg(this.src)">';
+  if(m.media==='video')h+='<video src="'+m.data+'" controls playsinline></video>';
+  if(m.media==='audio')h+='<audio src="'+m.data+'" controls></audio>';
+  h+='<div class="time">'+now()+'</div>';
+  e.innerHTML=h;$('#msgs').appendChild(e);scrollDown();
 }
-
-window.openImg=src=>{$('#viewerImg').src=src;$('#viewer').style.display='grid';};
+window.openImg=s=>{$('#viewerImg').src=s;$('#viewer').style.display='grid';};
 function scrollDown(){const m=$('#msgs');setTimeout(()=>m.scrollTop=m.scrollHeight,50);}
 
 function sendText(){
@@ -509,16 +487,11 @@ $('#msgInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendText();});
 /* ===== ФОТО / ВИДЕО ===== */
 $('#btnPhoto').onclick=()=>{sClick();$('#fileImg').click();};
 $('#btnVideo').onclick=()=>{sClick();$('#fileVid').click();};
-
-function sendFile(file,kind){
-  if(!file)return;
-  if(file.size>5*1024*1024)return toast('ФАЙЛ БОЛЬШЕ 5 МБ');
-  toast('ПЕРЕДАЧА...');staticBurst(.4,.04);
-  const r=new FileReader();
-  r.onload=()=>{
-    if(sendOut({t:'media',name:myName,kind,data:r.result})){addMsg({media:kind,data:r.result},true);sSend();}
-  };
-  r.readAsDataURL(file);
+function sendFile(f,kind){
+  if(!f)return;if(f.size>5*1024*1024)return toast('МАКС 5 МБ');
+  toast('ПЕРЕДАЧА...');burst(.4,.04);
+  const r=new FileReader();r.onload=()=>{if(sendOut({t:'media',name:myName,kind,data:r.result})){addMsg({media:kind,data:r.result},true);sSend();}};
+  r.readAsDataURL(f);
 }
 $('#fileImg').onchange=e=>{sendFile(e.target.files[0],'image');e.target.value='';};
 $('#fileVid').onchange=e=>{sendFile(e.target.files[0],'video');e.target.value='';};
@@ -528,47 +501,34 @@ $('#btnMic').onclick=async()=>{
   if(mediaRec&&mediaRec.state==='recording'){stopRec();return;}
   try{
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':
-               MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'';
+    const mime=MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'';
     mediaRec=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
     recChunks=[];recSec=0;
     mediaRec.ondataavailable=e=>{if(e.data.size>0)recChunks.push(e.data);};
     mediaRec.onstop=()=>{
       stream.getTracks().forEach(t=>t.stop());
-      if(recChunks.length===0)return;
+      if(!recChunks.length)return;
       const blob=new Blob(recChunks,{type:mediaRec.mimeType||'audio/webm'});
-      if(blob.size>8*1024*1024)return toast('ЗАПИСЬ СЛИШКОМ БОЛЬШАЯ');
-      const r=new FileReader();
-      r.onload=()=>{if(sendOut({t:'media',name:myName,kind:'audio',data:r.result})){addMsg({media:'audio',data:r.result},true);sSend();}};
+      const r=new FileReader();r.onload=()=>{if(sendOut({t:'media',name:myName,kind:'audio',data:r.result})){addMsg({media:'audio',data:r.result},true);sSend();}};
       r.readAsDataURL(blob);
     };
-    mediaRec.start(100);
-    $('#btnMic').classList.add('rec');$('#recBadge').style.display='block';sGeiger();
-    recTimer=setInterval(()=>{
-      recSec++;$('#recTime').textContent='0:'+String(recSec).padStart(2,'0');
-      if(recSec>=60)stopRec();
-    },1000);
-  }catch(e){toast('НЕТ ДОСТУПА К МИКРОФОНУ');dbg('mic err: '+e);}
+    mediaRec.start(100);$('#btnMic').classList.add('rec');$('#recBadge').style.display='block';sGeiger();
+    recTimer=setInterval(()=>{recSec++;$('#recTime').textContent='0:'+String(recSec).padStart(2,'0');if(recSec>=60)stopRec();},1000);
+  }catch(e){toast('НЕТ МИКРОФОНА');}
 };
-function stopRec(){
-  clearInterval(recTimer);
-  if(mediaRec&&mediaRec.state==='recording')mediaRec.stop();
-  $('#btnMic').classList.remove('rec');$('#recBadge').style.display='none';
-  $('#recTime').textContent='0:00';recSec=0;
-}
+function stopRec(){clearInterval(recTimer);if(mediaRec&&mediaRec.state==='recording')mediaRec.stop();$('#btnMic').classList.remove('rec');$('#recBadge').style.display='none';$('#recTime').textContent='0:00';recSec=0;}
 
-/* ===== ИНВАЙТ / ВЫХОД ===== */
+/* ===== КНОПКИ ===== */
+$('#btnDiag').onclick=()=>{sClick();runDiag();};
 $('#btnInvite').onclick=()=>{
-  sClick();
-  const link=location.origin+location.pathname+'?room='+roomId;
-  dbg('Invite link: '+link);
+  sClick();const link=location.origin+location.pathname+'?room='+roomId;
+  dbg('Link: '+link);
   if(navigator.clipboard)navigator.clipboard.writeText(link).then(()=>toast('ССЫЛКА СКОПИРОВАНА ✔')).catch(()=>prompt('Скопируйте:',link));
   else prompt('Скопируйте:',link);
 };
 $('#btnLeave').onclick=()=>{
   if(!confirm('Покинуть частоту?'))return;
-  localStorage.removeItem(STORE);
-  destroyPeer();location.href=location.origin+location.pathname;
+  localStorage.removeItem(STORE);destroyPeer();location.href=location.origin+location.pathname;
 };
 </script>
 </body>
